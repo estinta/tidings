@@ -1,4 +1,4 @@
-# Django settings for tidings project.
+import os.path
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -8,6 +8,8 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+
+PROJECT_HOME = os.path.abspath(os.path.dirname(__file__))
 
 DATABASES = {
     'default': {
@@ -73,14 +75,13 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'tidings.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_HOME, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -90,4 +91,5 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
+    'django.contrib.flatpages',
 )
