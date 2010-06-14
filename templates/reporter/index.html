@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "reporter/build_list_form.html" %}
+
+<div id="stockinfo">
+{% for stock in stocks %}
+<div class="stockframe">
+<table class="stockdetails pretty">
+    <thead></thead>
+    <tbody>
+        <td><strong>{{ stock.ticker }}</strong></td>
+        <td>{{ stock.company_name|title }}</td>
+        <td>{{ stock.ibd_industry_group|title }} [{{ stock.ibd_industry_rank }}]</td>
+        <td>EPS</td><td>{{ stock.ibd_earnings_percentage_lastquarter }}</td>
+        <td>Sales</td><td>{{ stock.ibd_sales_percentage_lastquarter }}</td>
+        <td>Earnings</td><td>{{ stock.ibd_earnings_due_date }}</td>
+        <td>Float</td><td>{{ stock.float }}</td>
+    </tbody>
+</table>
+
+{% regroup stock.news_set.all by source as news_list %}
+<table class="stocknews pretty">
+    <tr>
+        {% for source in news_list %}
+        <th>{{ source.grouper }}</th>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for source in news_list %}
+        <td>
+            {% for item in source.list %}
+            <a href={{item.link}}>{{item.title}}</a>
+            {{item.pub_date}}
+            <hr />
+            {% endfor %}
+        </td>
+        {% endfor %}
+    </tr>
+</table>
+</div>
+{% endfor %}
+</div>
+
+{% endblock %}

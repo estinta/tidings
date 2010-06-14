@@ -1,1 +1,32 @@
-# Create your views here.
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
+from scanner.models import News, Stock
+from scanner.utils import  fetch_float, fetch_ibd, fetch_news
+
+from .forms import BuildListForm, process_build_list
+
+def get_or_create_stocks(symbols):
+    stocks = []
+    for symbol in symbols:
+        stock, created = Stock.objects.get_or_create(ticker=symbol)
+        stocks.append(stock)
+    return stocks
+
+def index(request):
+    build_list_form = BuildListForm()
+    symbols = process_build_list(request)
+    stocks = get_or_create_stocks(symbols)
+    fetch_news()
+    fetch_ibd()
+    fetch_float()
+    # TODO: sucks that we have to fetch twice, but need to make
+    # sure we pick up updates from above fetches
+    stocks = get_or_create_stocks(symbols)
+
+    ctx = RequestContext(request, {
+        'build_list_form': build_list_form,
+        'stocks': stocks,
+    })
+    return render_to_response('reporter/index.html', ctx)
+

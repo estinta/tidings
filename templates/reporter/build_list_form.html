@@ -1,0 +1,9 @@
+<div id="symbolsform">
+<form method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <label for="id_symbols">Enter Stock Symbols:</label>
+    {{ build_list_form.symbols }}
+    <div>
+        <input type="submit" id="build_list" name="build_list" value="Fetch" />
+    </div>
+</form>
+</div>
