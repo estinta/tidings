@@ -18,6 +18,9 @@ MANAGERS = ADMINS
 
 PROJECT_HOME = os.path.abspath(os.path.dirname(__file__))
 
+# Used by the django-registration app
+ACCOUNT_ACTIVATION_DAYS = 7
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -99,6 +102,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.flatpages',
+    'registration',
     'scanner',
     'reporter',
 )
+

@@ -7,8 +7,9 @@ import os.path
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
-    (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
+    (r'^accounts/', include('registration.backends.default.urls')),
+    #(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    #(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
 
     (r'^$', 'reporter.views.index'),
 
