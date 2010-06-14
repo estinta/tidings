@@ -5,6 +5,21 @@
         {% block extrahead %}{% endblock %}
     </head>
     <body>
-        {% block content %}{% endblock %}
+        <div id="mainheader">
+            <div id="navlinks">
+                <ul>
+                    <li><a href="/about/">About</a></li>
+                    <li><a href="http://twitter.com/stocktidings">Twitter</a></li>
+                    <li><a href="/contact/">Contact Us</a></li>
+                    <li><a href="/accounts/register/">Sign Up</a></li>
+                    <li><a href="/accounts/login/">Login</a></li>
+            </div>
+            <h1>stocktidings</h1>
+        </div>
+        <div id="maincontent">
+            {% block content %}{% endblock %}
+        </div>
+        <div id="mainfooter">
+        </div>
     </body>
 </html>
