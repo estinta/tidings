@@ -1,2 +1,4 @@
 *.pyc
 dev.db
+private_settings.py
+tags
