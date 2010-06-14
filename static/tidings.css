@@ -1,0 +1,16 @@
+#navlinks {
+	float: right;
+}
+
+#navlinks ul {
+	font-weight: bold;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#navlinks ul li {
+	display: inline;
+	margin: 0;
+	padding: 0 1em 0 0;
+}
