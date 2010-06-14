@@ -1,5 +1,12 @@
 import os.path
 
+try:
+    from private_settings import *
+except ImportError, e:
+    print "Couldn't import private_settings, ignoring failure."
+    print "If you do not have this file you may want to create one."
+    print e
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
