@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
 from scanner.models import News, Stock
@@ -30,3 +30,12 @@ def index(request):
     })
     return render_to_response('reporter/index.html', ctx)
 
+def remove_symbol(request, symbol):
+    symbols = request.session.get('symbols', set())
+    symbols.discard(symbol)
+    request.session['symbols'] = symbols
+    return redirect('/')
+
+def remove_all_symbols(request):
+    request.session['symbols'] = set()
+    return redirect('/')

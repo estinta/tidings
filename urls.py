@@ -12,6 +12,8 @@ urlpatterns = patterns('',
     #(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
 
     (r'^$', 'reporter.views.index'),
+    (r'^remove/(?P<symbol>[^/]+)/$', 'reporter.views.remove_symbol'),
+    (r'^removeall/$', 'reporter.views.remove_all_symbols'),
 
     (r'^admin/', include(admin.site.urls)),
 )
