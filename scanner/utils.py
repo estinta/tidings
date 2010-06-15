@@ -18,8 +18,10 @@ def fetch_news():
                 news.save()
 
 def fetch_ibd():
-    StockLookup.login()
-    for stock in Stock.objects.filter(ibd_industry_rank=''):
+    qs = Stock.objects.filter(ibd_industry_rank='')
+    if len(qs) > 0:
+        StockLookup.login()
+    for stock in qs:
         print stock.ticker
         response = StockLookup.get_stock(stock.ticker)
         try:
