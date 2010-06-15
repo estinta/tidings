@@ -24,8 +24,8 @@ class Stock(models.Model):
 class News(models.Model):
     stock = models.ForeignKey(Stock)
     source = models.CharField(max_length=15)
-    title = models.CharField(max_length=128)
+    title = models.CharField(max_length=512)
     description = models.TextField()
-    link = models.URLField()
+    link = models.URLField(max_length=512)
     pub_date = models.CharField(max_length=10)
 
