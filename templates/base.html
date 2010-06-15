@@ -9,11 +9,18 @@
         <div id="mainheader">
             <div id="navlinks">
                 <ul>
+                    {% if user.is_authenticated %}
+                    <li>Hello, {{ user.username }}</li>
+                    {% endif %}
                     <li><a href="/about/">About</a></li>
                     <li><a href="http://twitter.com/stocktidings">Twitter</a></li>
                     <li><a href="/contact/">Contact Us</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="/accounts/logout/">Logout</a></li>
+                    {% else %}
                     <li><a href="/accounts/register/">Sign Up</a></li>
                     <li><a href="/accounts/login/">Login</a></li>
+                    {% endif %}
             </div>
             <h1>stocktidings</h1>
         </div>
