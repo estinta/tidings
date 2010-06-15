@@ -4,7 +4,7 @@ table {
     margin: 0.5em;
 }
 
-#mainheader, #symbolsform, #stockinfo {
+#mainheader, #symbolsform, #maincontent, #pledgebox, #mainfooter {
     border-bottom: 2px solid;
     margin-bottom: 0.5em;
 }
@@ -26,6 +26,10 @@ table {
     padding: 0 1em 0 0;
 }
 
+#mainlogo img {
+    border: 0;
+}
+
 #symbolsform #id_symbols {
     width: 40em;
     height: 5em;
@@ -42,10 +46,12 @@ table.pretty th, table.pretty td {
 .stockframe {
     border: 1px solid #c9c9c9;
     padding: auto;
+    margin-bottom: 0.5em;
 }
 
-.stockframe .removelink {
+.stockframe .stocklinks {
 	float: right;
+    margin: 0.5em 1em 0 0;
 }
 
 table.stockdetails {
