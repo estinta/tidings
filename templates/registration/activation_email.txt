@@ -1,0 +1,7 @@
+Congratulations! You have registered a new account on the stocktidings
+website.  You have {{ expiration_days }} days to activate your account.
+
+Simply click on the below link to confirm your account and you will be able
+to log in to the site:
+
+http://{{ site.domain }}/accounts/activate/{{ activation_key }}

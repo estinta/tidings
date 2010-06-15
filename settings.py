@@ -18,6 +18,9 @@ MANAGERS = ADMINS
 
 PROJECT_HOME = os.path.abspath(os.path.dirname(__file__))
 
+# Where to redirect by default after logging in
+LOGIN_REDIRECT_URL = '/'
+
 # Used by the django-registration app
 ACCOUNT_ACTIVATION_DAYS = 7
 
