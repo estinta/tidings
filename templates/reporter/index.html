@@ -35,7 +35,8 @@
         <td>
             {% for item in source.list %}
             <a href={{item.link}}>{{item.title}}</a>
-            {{item.pub_date}}
+            {{item.pub_date}}<br/>
+            {{item.description|safe}}
             <hr />
             {% endfor %}
         </td>
