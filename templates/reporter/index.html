@@ -6,6 +6,7 @@
 <div id="stockinfo">
 {% for stock in stocks %}
 <div class="stockframe">
+<div class="removelink"><a href="remove/{{ stock.ticker }}/">Remove</a></div>
 <table class="stockdetails pretty">
     <thead></thead>
     <tbody>

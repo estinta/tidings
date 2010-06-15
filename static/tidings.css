@@ -44,6 +44,10 @@ table.pretty th, table.pretty td {
     padding: auto;
 }
 
+.stockframe .removelink {
+	float: right;
+}
+
 table.stockdetails {
     margin-left: auto;
     margin-right: auto;
