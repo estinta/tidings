@@ -7,27 +7,50 @@
     </head>
     <body>
         <div id="mainheader">
+            <a name="top"></a>
             <div id="navlinks">
                 <ul>
                     {% if user.is_authenticated %}
                     <li>Hello, {{ user.username }}</li>
                     {% endif %}
                     <li><a href="/about/">About</a></li>
+                    <li><a href="#Pledge">Pledge</a></li>
                     <li><a href="http://twitter.com/stocktidings">Twitter</a></li>
-                    <li><a href="/contact/">Contact Us</a></li>
+                    <li><a href="mailto:support@stocktidings.com">Contact Us</a></li>
                     {% if user.is_authenticated %}
+                    <li><a href="/feedback/">Feedback</a></li>
                     <li><a href="/accounts/logout/">Logout</a></li>
                     {% else %}
-                    <li><a href="/accounts/register/">Sign Up</a></li>
+                    <li><a href="/accounts/register/">Register</a></li>
                     <li><a href="/accounts/login/">Login</a></li>
                     {% endif %}
+                </ul>
             </div>
-            <h1>stocktidings</h1>
+            <div id="mainlogo">
+                <a href="/"><img alt="stocktidings" title="stocktidings" src="/static/img/logo.png"></a>
+            </div>
         </div>
         <div id="maincontent">
             {% block content %}{% endblock %}
         </div>
-        <div id="mainfooter">
+        <div id="pledgebox">
+            <a href="#top">Back to top</a>
+            <a name="Pledge"></a>
+            <iframe src="http://spreadsheets.google.com/embeddedform?formkey=dFVNblNDMG9NNmgybVJBNEFwcGxvVVE6MQ" width="760" height="635" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
         </div>
+        <div id="mainfooter">
+            <div style="text-align:center">&#169; 2010 stocktidings.com | All rights reserved</div>
+        </div>
+        <script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-16981293-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+         </script>
     </body>
 </html>
