@@ -2,4 +2,15 @@
 
 {% block title %}stocktidings - {{ flatpage.title }}{% endblock %}
 
-{% block content %}{{ flatpage.content }}{% endblock %}
+{% block content %}
+{{ flatpage.content }}
+{% if flatpage.enable_comments %}
+{% load comments %}
+{% get_comment_count for flatpage as comment_count %}
+<h3>Comments ({{ comment_count }})</h3>
+<div class="comments">
+    {% render_comment_list for flatpage %}
+</div>
+{% render_comment_form for flatpage %}
+{% endif %}
+{% endblock %}

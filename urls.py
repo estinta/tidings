@@ -8,8 +8,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     (r'^accounts/', include('registration.backends.default.urls')),
-    #(r'^accounts/login/$', 'django.contrib.auth.views.login'),
-    #(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
+    (r'^comments/', include('django.contrib.comments.urls')),
 
     (r'^$', 'reporter.views.index'),
     (r'^remove/(?P<symbol>[^/]+)/$', 'reporter.views.remove_symbol'),

@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.flatpages',
+    'django.contrib.comments',
     'registration',
     'scanner',
     'reporter',

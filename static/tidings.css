@@ -69,3 +69,10 @@ table.stocknews td {
     vertical-align: top;
 }
 
+div.comments, div.commentform {
+	font-size: 0.8em;
+}
+
+div.commentform label {
+	display:block;
+}
