@@ -14,7 +14,6 @@
                     <li>Hello, {{ user.username }}</li>
                     {% endif %}
                     <li><a href="/about/">About</a></li>
-                    <li><a href="#Pledge">Pledge</a></li>
                     <li><a href="http://twitter.com/stocktidings">Twitter</a></li>
                     <li><a href="mailto:support@stocktidings.com">Contact Us</a></li>
                     {% if user.is_authenticated %}
@@ -32,11 +31,6 @@
         </div>
         <div id="maincontent">
             {% block content %}{% endblock %}
-        </div>
-        <div id="pledgebox">
-            <a href="#top">Back to top</a>
-            <a name="Pledge"></a>
-            <iframe src="http://spreadsheets.google.com/embeddedform?formkey=dFVNblNDMG9NNmgybVJBNEFwcGxvVVE6MQ" width="760" height="635" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
         </div>
         <div id="mainfooter">
             <div style="text-align:center">&#169; 2010 stocktidings.com | All rights reserved</div>

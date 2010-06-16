@@ -4,7 +4,7 @@ table {
     margin: 0.5em;
 }
 
-#mainheader, #symbolsform, #maincontent, #pledgebox, #mainfooter {
+#mainheader, #symbolsform, #maincontent, #mainfooter {
     border-bottom: 2px solid;
     margin-bottom: 0.5em;
 }
