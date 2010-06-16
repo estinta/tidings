@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
@@ -13,6 +14,7 @@ def get_or_create_stocks(symbols):
         stocks.append(stock)
     return stocks
 
+@login_required
 def index(request):
     build_list_form = BuildListForm()
     symbols = process_build_list(request)
@@ -30,12 +32,14 @@ def index(request):
     })
     return render_to_response('reporter/index.html', ctx)
 
+@login_required
 def remove_symbol(request, symbol):
     symbols = request.session.get('symbols', set())
     symbols.discard(symbol)
     request.session['symbols'] = symbols
     return redirect('/')
 
+@login_required
 def remove_all_symbols(request):
     request.session['symbols'] = set()
     return redirect('/')
