@@ -1,4 +1,19 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+
+class UserProfile(models.Model):
+    # Required to be a valid profile module
+    user = models.ForeignKey(User, unique=True)
+    # Start of our tracked fields
+    ibd_user = models.CharField(max_length=100, blank=True, default="")
+    ibd_password = models.CharField(max_length=100, blank=True, default="")
+
+def ensure_profile_exists(sender, **kwargs):
+    if kwargs.get('created', False):
+        UserProfile.objects.create(user=kwargs.get('instance'))
+
+post_save.connect(ensure_profile_exists, sender=User)
 
 class Stock(models.Model):
     ticker = models.CharField(max_length=15)

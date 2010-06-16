@@ -21,6 +21,9 @@ LOGIN_REDIRECT_URL = '/'
 # Used by the django-registration app
 ACCOUNT_ACTIVATION_DAYS = 7
 
+# We have a custom profile for storing IBD credentials
+AUTH_PROFILE_MODULE = 'scanner.UserProfile'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
