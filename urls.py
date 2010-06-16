@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     (r'^$', 'reporter.views.index'),
     (r'^remove/(?P<symbol>[^/]+)/$', 'reporter.views.remove_symbol'),
     (r'^removeall/$', 'reporter.views.remove_all_symbols'),
+    (r'^purgedb/$', 'reporter.views.purge_db'),
 
     (r'^admin/', include(admin.site.urls)),
 )
