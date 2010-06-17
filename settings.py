@@ -8,7 +8,7 @@ except ImportError, e:
     print e
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ('Dan McGee', 'dpmcgee@gmail.com'),
 )
 
 MANAGERS = ADMINS
