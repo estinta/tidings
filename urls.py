@@ -8,6 +8,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     (r'^accounts/', include('registration.backends.default.urls')),
+    (r'^accounts/profile/$', 'scanner.views.edit_profile'),
     (r'^comments/', include('django.contrib.comments.urls')),
 
     (r'^$', 'reporter.views.index'),
