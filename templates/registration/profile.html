@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<p>Please enter the following information.</p>
 <form method="post">{% csrf_token %}
     <table>
     {{ form }}
