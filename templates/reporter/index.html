@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if not user.get_profile.ibd_user %}
+<p class="message">Please fill out your <a href="/accounts/profile/">user
+	profile</a> to ensure you can continue using the site.</p>
+{% endif %}
 {% include "reporter/build_list_form.html" %}
 
 <div id="stockinfo">

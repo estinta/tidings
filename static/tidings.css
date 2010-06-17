@@ -9,6 +9,10 @@ table {
     margin-bottom: 0.5em;
 }
 
+.message {
+	color: #c00000;
+}
+
 #navlinks {
     float: right;
 }
