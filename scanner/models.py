@@ -6,8 +6,10 @@ class UserProfile(models.Model):
     # Required to be a valid profile module
     user = models.ForeignKey(User, unique=True)
     # Start of our tracked fields
-    ibd_user = models.CharField(max_length=100, blank=True, default="")
-    ibd_password = models.CharField(max_length=100, blank=True, default="")
+    ibd_user = models.CharField("IBD Username", max_length=100,
+            blank=True, default="")
+    ibd_password = models.CharField("IBD Password", max_length=100,
+            blank=True, default="")
 
 def ensure_profile_exists(sender, **kwargs):
     if kwargs.get('created', False):
