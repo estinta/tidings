@@ -1,3 +1,4 @@
+from datetime import datetime
 import feedparser
 import re
 import time
@@ -40,10 +41,7 @@ def get_news(symbol):
             summary = HTML_TAGS.sub('', summary)
             summary = summary.encode('ascii', 'replace')
             if 'updated_parsed' in entry:
-                pub_date = '%d/%d/%d' % (
-                        entry.updated_parsed.tm_mon,
-                        entry.updated_parsed.tm_mday,
-                        entry.updated_parsed.tm_year)
+                pub_date = datetime(*entry.updated_parsed[:6])
                 news[source].append(
                     {
                         'pub_date': pub_date,

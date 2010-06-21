@@ -7,10 +7,11 @@ from scanner.utils import  fetch_float, fetch_ibd, fetch_news
 
 from .forms import BuildListForm, process_build_list
 
-def get_or_create_stocks(symbols):
+def get_or_create_stocks(user, symbols):
     stocks = []
     for symbol in symbols:
-        stock, created = Stock.objects.get_or_create(ticker=symbol)
+        stock, created = Stock.objects.get_or_create(ticker=symbol,
+				user=user)
         stocks.append(stock)
     return stocks
 
@@ -18,13 +19,13 @@ def get_or_create_stocks(symbols):
 def index(request):
     build_list_form = BuildListForm()
     symbols = process_build_list(request)
-    stocks = get_or_create_stocks(symbols)
+    stocks = get_or_create_stocks(request.user, symbols)
     fetch_news()
     fetch_ibd()
     fetch_float()
     # TODO: sucks that we have to fetch twice, but need to make
     # sure we pick up updates from above fetches
-    stocks = get_or_create_stocks(symbols)
+    stocks = get_or_create_stocks(request.user, symbols)
 
     ctx = RequestContext(request, {
         'build_list_form': build_list_form,

@@ -19,6 +19,7 @@ post_save.connect(ensure_profile_exists, sender=User)
 
 class Stock(models.Model):
     ticker = models.CharField(max_length=15)
+    user = models.ForeignKey(User, db_index=True)
     company_name = models.CharField(max_length=127, blank=True, default="")
     ibd_earnings_due_date = models.CharField(max_length=15,
             blank=True, default="")
@@ -31,18 +32,17 @@ class Stock(models.Model):
             blank=True, default="")
     ibd_eps_rank = models.CharField(max_length=15, blank=True, default="")
     float = models.CharField(max_length=15, blank=True, default="")
-    telechart = models.CharField(max_length=15, blank=True, default="")
-    neglect = models.CharField(max_length=363, blank=True, default="")
-    comment = models.CharField(max_length=563, blank=True, default="")
-    ep_type = models.CharField(max_length=63, blank=True, default="")
-    action = models.CharField(max_length=63, blank=True, default="")
-    risk_percentage = models.CharField(max_length=63, blank=True, default="")
+
+    @property
+    def news_set(self):
+        return News.objects.filter(ticker=self.ticker).order_by('source', '-pub_date')
 
 class News(models.Model):
-    stock = models.ForeignKey(Stock)
+    # related to stocks, but not a true foreign key
+    ticker = models.CharField(max_length=15, db_index=True)
     source = models.CharField(max_length=15)
     title = models.CharField(max_length=512)
     description = models.TextField()
     link = models.URLField(max_length=512)
-    pub_date = models.CharField(max_length=10)
+    pub_date = models.DateTimeField()
 

@@ -1,21 +1,36 @@
+from datetime import datetime, timedelta
+
 from . import Finviz
 from . import StockLookup
 from . import StockNews
 
 from .models import News, Stock
 
-def fetch_news():
-    for stock in Stock.objects.filter(news__isnull=True):
-        print stock.ticker
-        for source, news_items in StockNews.get_news(stock.ticker).items():
-            for item in news_items:
-                news = News()
-                news.stock = stock
-                news.source = source
-                for key, value in item.items():
-                    # description, title, link, pub_date
-                    news.__setattr__(key, value)
-                news.save()
+def fetch_news(force=False, user=None):
+    if user is None:
+        qs = Stock.objects.values_list('ticker', flat=True).distinct()
+    else:
+        qs = Stock.objects.filter(user=user).values_list('ticker', flat=True).distinct()
+    for ticker in qs:
+        try:
+            latest_news = News.objects.filter(ticker=ticker).latest('pub_date')
+            print 'latest', ticker, latest_news.pub_date
+        except News.DoesNotExist:
+            latest_news = None
+        print 'now', ticker, datetime.utcnow()
+        if force or latest_news is None \
+                or latest_news.pub_date + timedelta(hours=3) < datetime.utcnow():
+            print ticker
+            for source, news_items in StockNews.get_news(ticker).items():
+                for item in news_items:
+                    news = News()
+                    news.ticker = ticker
+                    news.source = source
+                    for key, value in item.items():
+                        # description, title, link, pub_date
+                        news.__setattr__(key, value)
+                    print 'new', ticker, news.pub_date
+                    news.save()
 
 def fetch_ibd():
     qs = Stock.objects.filter(ibd_industry_rank='')
