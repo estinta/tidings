@@ -1,7 +1,7 @@
 from django.conf import settings
+from django.utils.http import urlencode
 
 import urllib2
-import urllib
 import cookielib
 import lxml.html
 import re
@@ -21,11 +21,15 @@ COMPANY_GROUP_RE = re.compile('(.*) RANK WITHIN THE (.*) GROUP \(\d+ STOCKS\)')
 
 def login():
     req = urllib2.Request(LOGIN_URL,
-            urllib.urlencode({'strEmail': settings.IBD_EMAIL,
+            urlencode({'strEmail': settings.IBD_EMAIL,
                 'strPassword': settings.IBD_PASSWORD,
                 'blnRemember': 'False'}), headers=HEADERS)
     response = urllib2.urlopen(req)
-    assert "SOK"in response.read()
+    data = response.read()
+    # were we successful logging in?
+    if "SOK" in data:
+        return True
+    return False
 
 def get_stock(symbol):
     req = urllib2.Request(URL + symbol, headers=HEADERS)
