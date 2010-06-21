@@ -20,9 +20,9 @@ def index(request):
     build_list_form = BuildListForm()
     symbols = process_build_list(request)
     stocks = get_or_create_stocks(request.user, symbols)
-    fetch_news()
+    fetch_news(user=request.user)
     profile = request.user.get_profile()
-    fetch_ibd(profile.ibd_user, profile.ibd_password)
+    fetch_ibd(profile.ibd_user, profile.ibd_password, user=request.user)
     # TODO: sucks that we have to fetch twice, but need to make
     # sure we pick up updates from above fetches
     stocks = get_or_create_stocks(request.user, symbols)
