@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -32,6 +34,7 @@ class Stock(models.Model):
             blank=True, default="")
     ibd_eps_rank = models.CharField(max_length=15, blank=True, default="")
     float = models.CharField(max_length=15, blank=True, default="")
+    last_update = models.DateTimeField(default=datetime(2000, 1, 1))
 
     @property
     def news_set(self):
@@ -45,4 +48,5 @@ class News(models.Model):
     description = models.TextField()
     link = models.URLField(max_length=512)
     pub_date = models.DateTimeField()
+    created = models.DateTimeField(default=datetime.utcnow)
 
