@@ -13,13 +13,16 @@ def fetch_news(force=False, user=None):
         qs = Stock.objects.filter(user=user).values_list('ticker', flat=True).distinct()
     for ticker in qs:
         try:
-            latest_news = News.objects.filter(ticker=ticker).latest('pub_date')
+            latest_news = News.objects.filter(ticker=ticker).latest('created')
         except News.DoesNotExist:
             latest_news = None
         if force or latest_news is None \
-                or latest_news.pub_date + timedelta(hours=3) < datetime.utcnow():
+                or latest_news.created + timedelta(hours=3) < datetime.utcnow():
             for source, news_items in StockNews.get_news(ticker).items():
                 for item in news_items:
+                    if News.objects.filter(ticker=ticker, source=source,
+                            guid=item['guid']).exists():
+                        continue
                     news = News()
                     news.ticker = ticker
                     news.source = source

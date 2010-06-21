@@ -47,6 +47,7 @@ def get_news(symbol):
                         'description': summary,
                         'title': entry.title.encode('ascii', 'replace'),
                         'link': entry.link,
+                        'guid': entry.id,
                         }
                     )
     return news

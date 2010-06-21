@@ -49,4 +49,7 @@ class News(models.Model):
     link = models.URLField(max_length=512)
     pub_date = models.DateTimeField()
     created = models.DateTimeField(default=datetime.utcnow)
+    guid = models.CharField(max_length=512)
 
+    class Meta:
+        unique_together = ('source', 'ticker', 'guid')
