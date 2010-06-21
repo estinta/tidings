@@ -28,10 +28,18 @@ def fetch_news(force=False, user=None):
                         news.__setattr__(key, value)
                     news.save()
 
-def fetch_ibd():
-    qs = Stock.objects.filter(ibd_industry_rank='')
+def fetch_ibd(username, password, force=False, user=None):
+    qs = Stock.objects.all()
+    if user is not None:
+        qs = Stock.objects.filter(user=user)
+    if not force:
+        old_date = datetime.utcnow() - timedelta(hours=24)
+        qs = Stock.objects.filter(last_update__lt=old_date)
     if len(qs) > 0:
-        StockLookup.login()
+        if not StockLookup.login(username, password):
+            # we failed to login
+            print "Login failed, can't update IBD data"
+            return
     for stock in qs:
         response = StockLookup.get_stock(stock.ticker)
         try:
@@ -47,10 +55,8 @@ def fetch_ibd():
         stock.ibd_sales_percentage_lastquarter = stock_dict[
                 'sales_perc_change']
         stock.ibd_eps_rank = stock_dict['eps_rating']
-        stock.save()
-
-def fetch_float():
-    for stock in Stock.objects.filter(float=''):
+        # lump this in here too; it all uses the same last_update date
         stock.float = Finviz.get_float(stock.ticker)
+        stock.last_update = datetime.utcnow()
         stock.save()
 
