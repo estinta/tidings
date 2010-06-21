@@ -24,7 +24,6 @@ def yahoo_date_parser(date_string):
     cleaned = "%d %s %d %d:%d:%d" % (int(day), month, int(year),
             int(hour), int(minute), int(second))
     t = time.strptime(cleaned, "%d %b %Y %H:%M:%S")
-    print "used yahoo date formatter for", date_string
     return t
 feedparser.registerDateHandler(yahoo_date_parser)
 

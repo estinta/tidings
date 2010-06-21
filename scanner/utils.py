@@ -14,13 +14,10 @@ def fetch_news(force=False, user=None):
     for ticker in qs:
         try:
             latest_news = News.objects.filter(ticker=ticker).latest('pub_date')
-            print 'latest', ticker, latest_news.pub_date
         except News.DoesNotExist:
             latest_news = None
-        print 'now', ticker, datetime.utcnow()
         if force or latest_news is None \
                 or latest_news.pub_date + timedelta(hours=3) < datetime.utcnow():
-            print ticker
             for source, news_items in StockNews.get_news(ticker).items():
                 for item in news_items:
                     news = News()
@@ -29,7 +26,6 @@ def fetch_news(force=False, user=None):
                     for key, value in item.items():
                         # description, title, link, pub_date
                         news.__setattr__(key, value)
-                    print 'new', ticker, news.pub_date
                     news.save()
 
 def fetch_ibd():
@@ -37,7 +33,6 @@ def fetch_ibd():
     if len(qs) > 0:
         StockLookup.login()
     for stock in qs:
-        print stock.ticker
         response = StockLookup.get_stock(stock.ticker)
         try:
             stock_dict = StockLookup.parse_stock(response)
