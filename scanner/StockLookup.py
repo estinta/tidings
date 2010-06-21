@@ -21,8 +21,8 @@ COMPANY_GROUP_RE = re.compile('(.*) RANK WITHIN THE (.*) GROUP \(\d+ STOCKS\)')
 
 def login(username, password):
     req = urllib2.Request(LOGIN_URL,
-            urlencode({'strEmail': settings.IBD_EMAIL,
-                'strPassword': settings.IBD_PASSWORD,
+            urlencode({'strEmail': username,
+                'strPassword': password,
                 'blnRemember': 'False'}), headers=HEADERS)
     response = urllib2.urlopen(req)
     data = response.read()
