@@ -4,6 +4,11 @@ table {
     margin: 0.5em;
 }
 
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+* html .clearfix{height:1%;}
+.clearfix{display:inline-block;}
+.clearfix{display:block;}
+
 #mainheader, #symbolsform, #maincontent, #mainfooter {
     border-bottom: 2px solid;
     margin-bottom: 0.5em;
@@ -85,6 +90,48 @@ div.comments, div.commentform {
 
 div.commentform label {
 	display:block;
+}
+
+#maincontent #aggregates_container .aggregate {
+  clear: both;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+#maincontent #aggregates_container .aggregate .content {
+  width: 390px;
+  float: right;
+}
+
+#maincontent #aggregates_container .aggregate .meta {
+  float: left;
+  width: 150px;
+  font-size: 11px;
+  margin-left: 10px;
+}
+
+#maincontent #aggregates_container .aggregate .meta .gravatar {
+  margin: 0 10px 0 0;
+  float: left;
+  border: 1px solid #eee;
+}
+
+#maincontent #aggregates_container .aggregate .meta .age,
+#maincontent #aggregates_container .aggregate .meta .author {
+  width: 96px;
+  margin-right: 10px;
+  float: left;
+}
+
+#maincontent #aggregates_container .aggregate.highlight {
+  -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  background: #d5dae5;
+  border-bottom: none;
+}
+
+#maincontent #aggregates_container .aggregate.aggregate_alert {
+  background: #fee;
 }
 
 .tweet_container form textarea {
