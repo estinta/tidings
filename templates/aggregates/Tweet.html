@@ -1,0 +1,11 @@
+{% load aggregates %}
+<div class="aggregate aggregate_tweet clearfix{% ifequal aggregate.user.username 'easyguru' %} highlight{% endifequal %}">
+    <div class="content">
+        {{aggregate.message}}
+    </div>
+    <div class="meta">
+        <span class="gravatar">{% gravatar aggregate.user.email 32 %}</span>
+        <span class="age">{{aggregate.time|age}}</span>
+        <span class="author">{{aggregate.user}}</span>
+    </div>
+</div>

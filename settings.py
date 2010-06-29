@@ -98,5 +98,6 @@ INSTALLED_APPS = (
     'registration',
     'scanner',
     'reporter',
+    'aggregator',
 )
 

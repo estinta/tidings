@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Timeline</h1>
+<div class="tweet_container">
+	<form method="post" action="{% url post_tweet %}">
+		{% csrf_token %}
+		{{form.message}}
+		<input type="submit" value="send" />
+	</form>
+</div>
+
+<div id="aggregates_container">
+	{% include "aggregates/aggregate_list.html" %}
+</div>
+<a class="button" href="javascript:refresh_tweets()">Request more notices</a>
+<script type="text/javascript">
+function refresh_tweets() {
+	$("#aggregates_container").load("/timeline/refresh/", null,
+            function(data, textStatus, request) {
+                $("#aggregator_menu a:not(#show_all_link, .selected_link)").each(function() {
+                    var id=$(this)[0].id;
+                    id = /(.*)_link/.exec(id)[1];
+                    $(".aggregate_" + id).hide();
+                    });
+            });
+}
+$(function() {
+	window.setInterval(refresh_tweets, 10000);
+});
+</script>
+{% endblock %}

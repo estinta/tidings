@@ -11,6 +11,8 @@ urlpatterns = patterns('',
     (r'^accounts/profile/$', 'scanner.views.edit_profile'),
     (r'^comments/', include('django.contrib.comments.urls')),
 
+    (r'^timeline/', include('aggregator.urls')),
+
     (r'^$', 'reporter.views.index'),
     (r'^remove/(?P<symbol>[^/]+)/$', 'reporter.views.remove_symbol'),
     (r'^removeall/$', 'reporter.views.remove_all_symbols'),

@@ -86,3 +86,14 @@ div.comments, div.commentform {
 div.commentform label {
 	display:block;
 }
+
+.tweet_container form textarea {
+  height: 70px;
+  width: 548px;
+  border: 1px solid #999;
+  padding: 5px;
+}
+
+.tweet_container form textarea:focus {
+  background: #f0f2f7;
+}

@@ -1,0 +1,4 @@
+        {% load aggregates %}
+        {% for aggregate in aggregates %}
+            {{aggregate|show_aggregate}}
+        {% endfor %}

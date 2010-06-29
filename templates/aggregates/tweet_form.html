@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Enter Message</h2>
+    <form method="post" action="{% url post_tweet %}">
+        {% csrf_token %}
+        {{form.message.errors}}
+        {{form.message}}
+        <input type="submit" value="send" />
+    </form>
+{% endblock %}
