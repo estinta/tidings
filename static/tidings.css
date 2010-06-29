@@ -92,6 +92,10 @@ div.commentform label {
 	display:block;
 }
 
+#maincontent #outer_container {
+  width: 560px;
+}
+
 #maincontent #aggregates_container .aggregate {
   clear: both;
   padding: 10px 0;
