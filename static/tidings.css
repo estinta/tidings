@@ -9,6 +9,27 @@ table {
 .clearfix{display:inline-block;}
 .clearfix{display:block;}
 
+a.button {
+  text-decoration: none;
+  background: #abd;
+  color: #333;
+  display: block;
+  float: right;
+  border: 1px solid #79a;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  padding: 5px;
+  font-weight: normal;
+  margin: 5px 0;
+}
+
+a.button:hover {
+  text-decoration: none;
+  background: #bde;
+}
+
+
 #mainheader, #symbolsform, #maincontent, #mainfooter {
     border-bottom: 2px solid;
     margin-bottom: 0.5em;
@@ -147,4 +168,9 @@ div.commentform label {
 
 .tweet_container form textarea:focus {
   background: #f0f2f7;
+}
+
+.tweet_container form input[type=submit] {
+  margin-top: 5px;
+  float: right;
 }

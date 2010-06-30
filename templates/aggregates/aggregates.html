@@ -10,12 +10,14 @@
 		<input type="submit" value="send" />
 	</form>
 </div>
+<div class="clearfix"></div>
 
 <div id="aggregates_container">
 	{% include "aggregates/aggregate_list.html" %}
 </div>
-</div>
 <a class="button" href="javascript:refresh_tweets()">Request more notices</a>
+<div class="clearfix"></div>
+</div>
 <script type="text/javascript">
 function refresh_tweets() {
 	$("#aggregates_container").load("/timeline/refresh/", null,
