@@ -14,8 +14,7 @@
                     {% if user.is_authenticated %}
                     <li>Hello, {{ user.username }}</li>
                     {% endif %}
-                    <li><a href="/about/">About</a></li>
-                    <li><a href="http://twitter.com/stocktidings">Twitter</a></li>
+                    <li><a href="/timeline/">Timeline</a></li>
                     <li><a href="mailto:support@stocktidings.com">Contact Us</a></li>
                     {% if user.is_authenticated %}
                     <li><a href="/feedback/">Feedback</a></li>
@@ -34,9 +33,11 @@
         <div id="maincontent">
             {% block content %}{% endblock %}
         </div>
+        {% comment %}
         <div id="mainfooter">
             <div style="text-align:center">&#169; 2010 stocktidings.com | All rights reserved</div>
         </div>
+        {% endcomment %}
         <script type="text/javascript">
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-16981293-1']);
