@@ -49,7 +49,11 @@ class News(models.Model):
     link = models.URLField(max_length=512)
     pub_date = models.DateTimeField()
     created = models.DateTimeField(default=datetime.utcnow)
-    guid = models.CharField(max_length=512)
+    guid = models.CharField(max_length=240)
 
     class Meta:
+		# I hate you, MySQL. These can't add up to more than 1000 bytes using
+		# MyISAM, and since UTF-8 takes 3 bytes a piece, that means 333
+		# characters total for all three fields, thus the oddly sized '240'
+		# used for guid above.
         unique_together = ('source', 'ticker', 'guid')
