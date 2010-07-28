@@ -24,8 +24,12 @@ def login(username, password):
             urlencode({'strEmail': username,
                 'strPassword': password,
                 'blnRemember': 'False'}), headers=HEADERS)
-    response = urllib2.urlopen(req)
-    data = response.read()
+    try:
+        response = urllib2.urlopen(req)
+        data = response.read()
+    except urllib2.URLError, e:
+        print "login", e
+        return False
     # were we successful logging in?
     if "SOK" in data:
         return True
@@ -33,8 +37,12 @@ def login(username, password):
 
 def get_stock(symbol):
     req = urllib2.Request(URL + symbol, headers=HEADERS)
-    response = urllib2.urlopen(req)
-    return response
+    try:
+        response = urllib2.urlopen(req)
+        return response
+    except urllib2.URLError, e:
+        print "get_stock failed", e
+        return None
 
 def parse_investor_table(doc, title):
     '''Helper for tables that contain a
@@ -48,6 +56,8 @@ def parse_stock(response):
     '''This is the messy part. It parses the output using LXML and makes a
     dictionary of values of interest. If there is breakage, its probably in
     here.'''
+    if not response:
+        return None
     parsed_data = {}
     doc = lxml.html.parse(response).getroot()
     company_group = doc.cssselect("#stock-checkup-group-performance strong")[0]

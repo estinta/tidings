@@ -44,10 +44,12 @@ def fetch_ibd(username, password, force=False, user=None):
             print "Login failed, can't update IBD data"
             return
     for stock in qs:
-        response = StockLookup.get_stock(stock.ticker)
         try:
+            response = StockLookup.get_stock(stock.ticker)
             stock_dict = StockLookup.parse_stock(response)
         except Exception, e:
+            continue
+        if not response or not stock_dict:
             continue
         stock.ibd_industry_rank = stock_dict['industry_group_rank']
         stock.ibd_earnings_due_date = stock_dict['earnings_due_date']
