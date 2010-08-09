@@ -6,11 +6,13 @@ from . import StockNews
 
 from .models import News, Stock
 
-def fetch_news(force=False, user=None):
-    if user is None:
-        qs = Stock.objects.values_list('ticker', flat=True).distinct()
-    else:
-        qs = Stock.objects.filter(user=user).values_list('ticker', flat=True).distinct()
+def fetch_news(force=False, user=None, tickers=None):
+    qs = Stock.objects.all()
+    if user:
+        qs = qs.filter(user=user)
+    if tickers:
+        qs = qs.filter(ticker__in=tickers)
+    qs = qs.values_list('ticker', flat=True).distinct()
     for ticker in qs:
         try:
             latest_news = News.objects.filter(ticker=ticker).latest('created')
@@ -31,13 +33,16 @@ def fetch_news(force=False, user=None):
                         news.__setattr__(key, value)
                     news.save()
 
-def fetch_ibd(username, password, force=False, user=None):
+def fetch_ibd(username, password, force=False, user=None,
+        tickers=None):
     qs = Stock.objects.all()
     if user is not None:
-        qs = Stock.objects.filter(user=user)
+        qs = qs.filter(user=user)
+    if tickers:
+        qs = qs.filter(ticker__in=tickers)
     if not force:
         old_date = datetime.utcnow() - timedelta(hours=24)
-        qs = Stock.objects.filter(last_update__lt=old_date)
+        qs = qs.filter(last_update__lt=old_date)
     if len(qs) > 0:
         if not StockLookup.login(username, password):
             # we failed to login
@@ -48,6 +53,7 @@ def fetch_ibd(username, password, force=False, user=None):
             response = StockLookup.get_stock(stock.ticker)
             stock_dict = StockLookup.parse_stock(response)
         except Exception, e:
+            print "could not fetch IBD data", e
             continue
         if not response or not stock_dict:
             continue

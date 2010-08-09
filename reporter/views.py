@@ -11,7 +11,7 @@ def get_or_create_stocks(user, symbols):
     stocks = []
     for symbol in symbols:
         stock, created = Stock.objects.get_or_create(
-				ticker=symbol, user=user)
+                ticker=symbol, user=user)
         stocks.append(stock)
     return stocks
 
@@ -20,9 +20,10 @@ def index(request):
     build_list_form = BuildListForm()
     symbols = process_build_list(request)
     stocks = get_or_create_stocks(request.user, symbols)
-    fetch_news(user=request.user)
+    fetch_news(user=request.user, tickers=symbols)
     profile = request.user.get_profile()
-    fetch_ibd(profile.ibd_user, profile.ibd_password, user=request.user)
+    fetch_ibd(profile.ibd_user, profile.ibd_password,
+            user=request.user, tickers=symbols)
     # TODO: sucks that we have to fetch twice, but need to make
     # sure we pick up updates from above fetches
     stocks = get_or_create_stocks(request.user, symbols)
