@@ -10,7 +10,7 @@ def fetch_news(force=False, user=None, tickers=None):
     qs = Stock.objects.all()
     if user:
         qs = qs.filter(user=user)
-    if tickers:
+    if tickers != None:
         qs = qs.filter(ticker__in=tickers)
     qs = qs.values_list('ticker', flat=True).distinct()
     for ticker in qs:
@@ -38,7 +38,7 @@ def fetch_ibd(username, password, force=False, user=None,
     qs = Stock.objects.all()
     if user is not None:
         qs = qs.filter(user=user)
-    if tickers:
+    if tickers != None:
         qs = qs.filter(ticker__in=tickers)
     if not force:
         old_date = datetime.utcnow() - timedelta(hours=24)
