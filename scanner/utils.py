@@ -20,17 +20,22 @@ def fetch_news(force=False, user=None, tickers=None):
             latest_news = None
         if force or latest_news is None \
                 or latest_news.created + timedelta(hours=3) < datetime.utcnow():
+            # Slightly hacky, but MySQL silently truncates our values otherwise
+            # so we lose. This ensures we can do equality matching without any
+            # problems.
+            guid_len = News._meta.get_field('guid').max_length
             for source, news_items in StockNews.get_news(ticker).items():
                 for item in news_items:
-                    if News.objects.filter(ticker=ticker, source=source,
-                            guid=item['guid']).exists():
+                    guid = item['guid'][:guid_len]
+                    if News.objects.filter(ticker=ticker, source=source, guid=guid).exists():
                         continue
                     news = News()
                     news.ticker = ticker
                     news.source = source
                     for key, value in item.items():
-                        # description, title, link, pub_date
+                        # description, title, link, pub_date, guid (overridden below)
                         news.__setattr__(key, value)
+                    news.guid = guid
                     news.save()
 
 def fetch_ibd(username, password, force=False, user=None,
