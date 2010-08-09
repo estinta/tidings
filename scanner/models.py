@@ -43,9 +43,12 @@ class Stock(models.Model):
     float = models.CharField(max_length=15, blank=True, default="")
     last_update = models.DateTimeField(default=datetime(2000, 1, 1))
 
-    @property
-    def news_set(self):
-        return News.objects.filter(ticker=self.ticker).order_by('source', '-pub_date')
+    def current_news(self):
+        '''returns list of (source, [ news ]) tuples'''
+        news = []
+        for source in get_news_sources():
+            news.append((source, News.objects.filter(ticker=self.ticker,source=source).order_by('-pub_date')[:20]))
+        return news
 
 class News(models.Model):
     # related to stocks, but not a true foreign key
@@ -64,3 +67,7 @@ class News(models.Model):
 		# characters total for all three fields, thus the oddly sized '240'
 		# used for guid above.
         unique_together = ('source', 'ticker', 'guid')
+
+        # Another useful index that is great to have, but we can't create it
+        # via Django due to its non-uniqueness:
+        # CREATE INDEX `scanner_news_published` ON `scanner_news` (`source`, `ticker`, `pub_date`);

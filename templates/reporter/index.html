@@ -27,17 +27,17 @@
     </tbody>
 </table>
 
-{% regroup stock.news_set.all by source as news_list %}
+{% with stock.current_news as news_list %}
 <table class="stocknews pretty">
     <tr>
-        {% for source in news_list %}
-        <th>{{ source.grouper }}</th>
+        {% for source, news in news_list %}
+        <th>{{ source }}</th>
         {% endfor %}
     </tr>
     <tr>
-        {% for source in news_list %}
+        {% for source, news in news_list %}
         <td>
-            {% for item in source.list %}
+            {% for item in news %}
             <a href={{item.link}}>{{item.title}}</a>
             {{item.pub_date}}<br/>
             {{item.description|safe}}
@@ -47,6 +47,7 @@
         {% endfor %}
     </tr>
 </table>
+{% endwith %}
 </div>
 {% endfor %}
 </div>
