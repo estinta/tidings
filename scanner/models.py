@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 
+from . import StockNews
+
 class UserProfile(models.Model):
     # Required to be a valid profile module
     user = models.ForeignKey(User, unique=True)
@@ -18,6 +20,11 @@ def ensure_profile_exists(sender, **kwargs):
         UserProfile.objects.create(user=kwargs.get('instance'))
 
 post_save.connect(ensure_profile_exists, sender=User)
+
+def get_news_sources():
+    l = StockNews.get_sources()
+    l.sort()
+    return l
 
 class Stock(models.Model):
     ticker = models.CharField(max_length=15)

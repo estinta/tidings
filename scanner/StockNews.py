@@ -3,10 +3,12 @@ import feedparser
 import re
 import time
 
-URLS = {'Yahoo': "http://finance.yahoo.com/rss/headline?s=",
-        'Google': "http://www.google.com/finance/company_news?output=rss&q=",
-        'MSN': "http://moneycentral.msn.com/community/rss/generate_feed.aspx?feedType=0&Symbol="
+URLS = {
+    'Yahoo': "http://finance.yahoo.com/rss/headline?s=",
+    'Google': "http://www.google.com/finance/company_news?output=rss&q=",
+    'MSN': "http://moneycentral.msn.com/community/rss/generate_feed.aspx?feedType=0&Symbol="
 }
+
 USER_AGENT = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2"
 
 HEADERS={'User-Agent': USER_AGENT}
@@ -26,6 +28,9 @@ def yahoo_date_parser(date_string):
     t = time.strptime(cleaned, "%d %b %Y %H:%M:%S")
     return t
 feedparser.registerDateHandler(yahoo_date_parser)
+
+def get_sources():
+    return URLS.keys()
 
 def get_news(symbol):
     news = {}
