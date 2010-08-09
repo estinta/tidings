@@ -17,8 +17,8 @@ from aggregator.forms import TweetForm
 def aggregator(request):
     '''Aggregate several objects into a single feed.'''
     tweet_form = TweetForm()
-    return refresh_aggregates(request, "aggregates/aggregates.html",
-            {'form': tweet_form})
+    return render_aggregates(request, template="aggregates/aggregates.html",
+            extra_context={'form': tweet_form})
 
 @login_required
 def post_tweet(request):
@@ -34,11 +34,19 @@ def post_tweet(request):
                 'form': form}))
 
 @login_required
-def refresh_aggregates(request, template="aggregates/aggregate_list.html",
-        extra_context=None):
+def refresh_aggregates(request, num_tweets=20,
+        template="aggregates/aggregate_list.html", extra_context=None):
+    return render_aggregates(request, num_tweets, template, extra_context)
+
+def render_aggregates(request, num_tweets=20,
+        template="aggregates/aggregate_list.html", extra_context=None):
     extra_context = extra_context or {}
 
-    tweets = Tweet.objects.all().order_by("-time")[:20]
+    num_tweets = int(num_tweets)
+    if num_tweets > 200:
+        num_tweets = 200
+
+    tweets = Tweet.objects.all().order_by("-time")[:num_tweets]
 
     context = {'aggregates': tweets}
     context.update(extra_context)
