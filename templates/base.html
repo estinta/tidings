@@ -17,9 +17,9 @@
                     <li><a href="/timeline/">Timeline</a></li>
                     <li><a href="mailto:support@stocktidings.com">Contact Us</a></li>
                     {% if user.is_authenticated %}
-                    <li><a href="/feedback/">Feedback</a></li>
-                    <li><a href="/accounts/profile/">User Profile</a></li>
-                    <li><a href="/accounts/logout/">Logout</a></li>
+                    <li><a href="/accounts/profile/">Settings</a></li>
+                    <li><a href="#" onclick="UserVoice.Popin.show(uservoiceOptions); return false;">Feedback</a></li>
+<li><a href="/accounts/logout/">Logout</a></li>
                     {% else %}
                     <li><a href="/accounts/register/">Register</a></li>
                     <li><a href="/accounts/login/">Login</a></li>
@@ -60,5 +60,21 @@ zenbox_params.url = "stockbeebiz.zendesk.com";
 </script>
 <style type='text/css'>@import url('//assets0.zendesk.com/external/zenbox/overlay.css');</style>
 <script type='text/javascript' src='//assets0.zendesk.com/external/zenbox/overlay.js'></script>
+<script type="text/javascript">
+  var uservoiceOptions = {
+    key: 'stocktidings',
+    host: 'stocktidings.uservoice.com', 
+    forum: '74637',
+    lang: 'en',
+    showTab: false
+  };
+  function _loadUserVoice() {
+    var s = document.createElement('script');
+    s.src = ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js";
+    document.getElementsByTagName('head')[0].appendChild(s);
+  }
+  _loadSuper = window.onload;
+  window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
+</script>
     </body>
 </html>
