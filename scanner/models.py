@@ -33,6 +33,9 @@ def get_news_sources():
 class Stock(models.Model):
     ticker = models.CharField(max_length=15)
     user = models.ForeignKey(User, db_index=True)
+
+    ## IBD Data
+    # TODO: we can probably find company name somewhere else than IBD...
     company_name = models.CharField(max_length=127, blank=True, default="")
     ibd_earnings_due_date = models.CharField(max_length=15,
             blank=True, default="")
@@ -44,8 +47,17 @@ class Stock(models.Model):
     ibd_sales_percentage_lastquarter = models.CharField(max_length=15,
             blank=True, default="")
     ibd_eps_rank = models.CharField(max_length=15, blank=True, default="")
-    float = models.CharField(max_length=15, blank=True, default="")
-    last_update = models.DateTimeField(default=datetime(2000, 1, 1))
+    ibd_last_update = models.DateTimeField(default=datetime(2000, 1, 1))
+
+    ## Finviz Data
+    finviz_float = models.CharField(max_length=15, blank=True, default="")
+    finviz_last_update = models.DateTimeField(default=datetime(2000, 1, 1))
+
+    ## News Data
+    yahoo_last_update = models.DateTimeField(default=datetime(2000, 1, 1))
+    google_last_update = models.DateTimeField(default=datetime(2000, 1, 1))
+    msn_last_update = models.DateTimeField(default=datetime(2000, 1, 1))
+    briefing_last_update = models.DateTimeField(default=datetime(2000, 1, 1))
 
     def current_news(self):
         '''returns list of (source, [ news ]) tuples'''

@@ -46,8 +46,8 @@ def fetch_ibd(username, password, force=False, user=None,
     if tickers != None:
         qs = qs.filter(ticker__in=tickers)
     if not force:
-        old_date = datetime.utcnow() - timedelta(hours=24)
-        qs = qs.filter(last_update__lt=old_date)
+        old_date = datetime.utcnow() - timedelta(hours=1)
+        qs = qs.filter(ibd_last_update__lt=old_date)
     if len(qs) > 0:
         if not StockLookup.login(username, password):
             # we failed to login
@@ -71,9 +71,22 @@ def fetch_ibd(username, password, force=False, user=None,
         stock.ibd_sales_percentage_lastquarter = stock_dict[
                 'sales_perc_change']
         stock.ibd_eps_rank = stock_dict['eps_rating']
-        # lump this in here too; it all uses the same last_update date
-        stock.float = Finviz.get_float(stock.ticker)
-        stock.last_update = datetime.utcnow()
+        stock.ibd_last_update = datetime.utcnow()
+        stock.save()
+
+def fetch_finviz(force=False, user=None, tickers=None):
+    qs = Stock.objects.all()
+    if user is not None:
+        qs = qs.filter(user=user)
+    if tickers != None:
+        qs = qs.filter(ticker__in=tickers)
+    if not force:
+        old_date = datetime.utcnow() - timedelta(hours=24)
+        qs = qs.filter(finviz_last_update__lt=old_date)
+    print "fetching finviz for ", list(qs)
+    for stock in qs:
+        stock.finviz_float = Finviz.get_float(stock.ticker)
+        stock.finviz_last_update = datetime.utcnow()
         stock.save()
 
 def validate_ibd(username, password):
