@@ -4,6 +4,7 @@ from django.template import RequestContext
 
 from .models import UserProfile
 from .forms import UserProfileForm
+from .utils import validate_ibd, validate_briefing
 
 @login_required
 def edit_profile(request):
@@ -15,11 +16,20 @@ def edit_profile(request):
             up = form.save(commit=False)
             up.user = request.user
             up.save()
-            next = request.GET.get('next') or '/'
+            if 'validate' not in request.POST:
+                next = request.GET.get('next') or '/'
+            else:
+                next = request.path + '?check=true'
             return redirect(next)
     else:
         form = UserProfileForm(instance=prof)
 
+    ctx = { 'form': form }
+    if 'check' in request.GET:
+        ctx['ibd_status'] = validate_ibd(prof.ibd_user, prof.ibd_password)
+        ctx['briefing_status'] = validate_briefing(
+                prof.briefing_user, prof.briefing_password)
+
     return render_to_response('registration/profile.html',
-            RequestContext(request, { 'form': form }))
+            RequestContext(request, ctx))
 
