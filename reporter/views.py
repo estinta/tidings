@@ -21,12 +21,11 @@ def index(request):
     stocks = get_or_create_stocks(symbols)
     fetch_news(user=request.user, tickers=symbols)
     profile = request.user.get_profile()
-    fetch_ibd(profile.ibd_user, profile.ibd_password,
-            user=request.user, tickers=symbols)
-    fetch_finviz(user=request.user, tickers=symbols)
+    fetch_ibd(profile.ibd_user, profile.ibd_password, tickers=symbols)
+    fetch_finviz(tickers=symbols)
     # TODO: sucks that we have to fetch twice, but need to make
     # sure we pick up updates from above fetches
-    stocks = get_or_create_stocks(request.user, symbols)
+    stocks = get_or_create_stocks(symbols)
 
     ctx = RequestContext(request, {
         'build_list_form': build_list_form,

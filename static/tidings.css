@@ -110,6 +110,11 @@ table.stocknews td {
     vertical-align: top;
 }
 
+table.stocknews .newsitems {
+    text-align: left;
+    padding-left: 20px;
+}
+
 div.comments, div.commentform {
     font-size: 0.8em;
 }

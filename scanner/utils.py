@@ -8,48 +8,53 @@ from .models import News, Stock
 
 def fetch_news(force=False, user=None, tickers=None):
     qs = Stock.objects.all()
-    if user:
-        qs = qs.filter(user=user)
     if tickers != None:
         qs = qs.filter(ticker__in=tickers)
-    qs = qs.values_list('ticker', flat=True).distinct()
-    for ticker in qs:
-        try:
-            latest_news = News.objects.filter(ticker=ticker).latest('created')
-        except News.DoesNotExist:
-            latest_news = None
-        if force or latest_news is None \
-                or latest_news.created + timedelta(hours=3) < datetime.utcnow():
-            # Slightly hacky, but MySQL silently truncates our values otherwise
-            # so we lose. This ensures we can do equality matching without any
-            # problems.
-            guid_len = News._meta.get_field('guid').max_length
-            for source, news_items in StockNews.get_news(ticker).items():
-                for item in news_items:
-                    guid = item['guid'][:guid_len]
-                    if News.objects.filter(ticker=ticker, source=source, guid=guid).exists():
-                        continue
-                    news = News()
-                    news.ticker = ticker
-                    news.source = source
-                    for key, value in item.items():
-                        # description, title, link, pub_date, guid (overridden below)
-                        news.__setattr__(key, value)
-                    news.guid = guid
-                    news.save()
 
-def fetch_ibd(username, password, force=False, user=None,
+    old_date = datetime.utcnow() - timedelta(minutes=15)
+    # Slightly hacky, but MySQL silently truncates our values otherwise
+    # so we lose. This ensures we can do equality matching without any
+    # problems.
+    guid_len = News._meta.get_field('guid').max_length
+
+    for stock in qs:
+        news_items = []
+        if force or stock.yahoo_last_update < old_date:
+            news_items.extend(StockNews.get_news(stock.ticker, 'yahoo'))
+            stock.yahoo_last_update = datetime.utcnow()
+        if force or stock.google_last_update < old_date:
+            news_items.extend(StockNews.get_news(stock.ticker, 'google'))
+            stock.google_last_update = datetime.utcnow()
+        if force or stock.msn_last_update < old_date:
+            news_items.extend(StockNews.get_news(stock.ticker, 'msn'))
+            stock.msn_last_update = datetime.utcnow()
+
+        for item in news_items:
+            guid = item['guid'][:guid_len]
+            if News.objects.filter(stock=stock,
+                    source=item['source'], guid=guid).exists():
+                continue
+            news = News()
+            news.stock = stock
+            for key, value in item.items():
+                # description, title, link, pub_date, source, guid (overridden below)
+                news.__setattr__(key, value)
+            news.guid = guid
+            news.save()
+
+        stock.save()
+
+def fetch_ibd(username, password, force=False,
         tickers=None):
     qs = Stock.objects.all()
-    if user is not None:
-        qs = qs.filter(user=user)
     if tickers != None:
         qs = qs.filter(ticker__in=tickers)
     if not force:
         old_date = datetime.utcnow() - timedelta(hours=1)
         qs = qs.filter(ibd_last_update__lt=old_date)
     if len(qs) > 0:
-        if not StockLookup.login(username, password):
+        if not username or not password or \
+                not StockLookup.login(username, password):
             # we failed to login
             print "Login failed, can't update IBD data"
             return
@@ -74,10 +79,8 @@ def fetch_ibd(username, password, force=False, user=None,
         stock.ibd_last_update = datetime.utcnow()
         stock.save()
 
-def fetch_finviz(force=False, user=None, tickers=None):
+def fetch_finviz(force=False, tickers=None):
     qs = Stock.objects.all()
-    if user is not None:
-        qs = qs.filter(user=user)
     if tickers != None:
         qs = qs.filter(ticker__in=tickers)
     if not force:

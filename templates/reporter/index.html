@@ -27,27 +27,48 @@
     </tbody>
 </table>
 
-{% with stock.current_news as news_list %}
 <table class="stocknews pretty">
     <tr>
-        {% for source, news in news_list %}
-        <th>{{ source }}</th>
-        {% endfor %}
+        <th>Google</th>
+        <th>MSN</th>
+        <th>Yahoo</th>
     </tr>
     <tr>
-        {% for source, news in news_list %}
         <td>
-            {% for item in news %}
-            <a href={{item.link}}>{{item.title}}</a>
-            {{item.pub_date}}<br/>
-            {{item.description|safe}}
-            <hr />
-            {% endfor %}
+            <ul class="newsitems">
+                {% for item in stock.google_news %}
+                <li>
+                    <p><a href={{item.link}}>{{item.title|safe}}</a> —
+                    {{item.pub_date}} UTC —
+                    {{item.description|removetags:'div br'|safe}}</p>
+                </li>
+                {% endfor %}
+            </ul>
         </td>
-        {% endfor %}
+        <td>
+            <ul class="newsitems">
+                {% for item in stock.msn_news %}
+                <li>
+                    <p><a href={{item.link}}>{{item.title}}</a> —
+                    {{item.pub_date}} UTC —
+                    {{item.description|safe}}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </td>
+        <td>
+            <ul class="newsitems">
+                {% for item in stock.yahoo_news %}
+                <li>
+                    <p><a href={{item.link}}>{{item.title}}</a> —
+                    {{item.pub_date}} UTC —
+                    {{item.description|safe}}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </td>
     </tr>
 </table>
-{% endwith %}
 </div>
 {% endfor %}
 </div>

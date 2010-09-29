@@ -3,13 +3,13 @@ import feedparser
 import re
 import time
 
-URLS = {
-    'Yahoo': "http://finance.yahoo.com/rss/headline?s=",
-    'Google': "http://www.google.com/finance/company_news?output=rss&q=",
-    'MSN': "http://moneycentral.msn.com/community/rss/generate_feed.aspx?feedType=0&Symbol="
+RSS_URLS = {
+    'yahoo': "http://finance.yahoo.com/rss/headline?s=",
+    'google': "http://www.google.com/finance/company_news?output=rss&q=",
+    'msn': "http://moneycentral.msn.com/community/rss/generate_feed.aspx?feedType=0&Symbol="
 }
 
-USER_AGENT = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2"
+USER_AGENT = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.10) Gecko/20100928 Firefox/3.6.10"
 
 HEADERS={'User-Agent': USER_AGENT}
 
@@ -29,31 +29,28 @@ def yahoo_date_parser(date_string):
     return t
 feedparser.registerDateHandler(yahoo_date_parser)
 
-def get_sources():
-    return URLS.keys()
+def get_news(symbol, source):
+    if source in RSS_URLS:
+        return get_rss_news(symbol, source)
+    else:
+        # TODO for briefing.com news
+        return None
 
-def get_news(symbol):
-    news = {}
-    for source, url in URLS.items():
-        news[source] = []
-        feed = feedparser.parse(url + symbol)
-        for entry in feed.entries:
-            summary = entry.summary
-            summary = summary.replace('\n', '')
-            summary = summary.replace('\r', '')
-            summary = summary.replace('\t', '')
-            summary = HTML_TAGS.sub('', summary)
-            summary = summary.encode('ascii', 'replace')
-            if 'updated_parsed' in entry:
-                pub_date = datetime(*entry.updated_parsed[:6])
-                news[source].append(
-                    {
-                        'pub_date': pub_date,
-                        'description': summary,
-                        'title': entry.title.encode('ascii', 'replace'),
-                        'link': entry.link,
-                        'guid': entry.id,
-                        }
-                    )
+def get_rss_news(symbol, source):
+    news = []
+    url = RSS_URLS[source]
+    feed = feedparser.parse(url + symbol)
+    for entry in feed.entries:
+        if 'updated_parsed' in entry:
+            pub_date = datetime(*entry.updated_parsed[:6])
+            news.append({
+                'pub_date': pub_date,
+                'description': entry.summary,
+                'title': entry.title,
+                'link': entry.link,
+                'guid': entry.id,
+                'source': source,
+            })
     return news
+
 # vim: set ts=4 sw=4 et:

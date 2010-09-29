@@ -29,11 +29,6 @@ def ensure_profile_exists(sender, **kwargs):
 
 post_save.connect(ensure_profile_exists, sender=User)
 
-def get_news_sources():
-    l = StockNews.get_sources()
-    l.sort()
-    return l
-
 class Stock(models.Model):
     ticker = models.CharField(max_length=15)
 
@@ -62,17 +57,21 @@ class Stock(models.Model):
     msn_last_update = models.DateTimeField(default=datetime(2000, 1, 1))
     briefing_last_update = models.DateTimeField(default=datetime(2000, 1, 1))
 
-    def current_news(self):
-        '''returns list of (source, [ news ]) tuples'''
-        news = []
-        for source in get_news_sources():
-            news.append((source, News.objects.filter(ticker=self.ticker,source=source).order_by('-pub_date')[:20]))
-        return news
+    def yahoo_news(self):
+        return News.objects.filter(stock=self,source='yahoo').order_by('-pub_date')[:20]
+
+    def google_news(self):
+        # Google always has longer descriptions, so fetch fewer of them
+        return News.objects.filter(stock=self,source='google').order_by('-pub_date')[:15]
+
+    def msn_news(self):
+        return News.objects.filter(stock=self,source='msn').order_by('-pub_date')[:20]
+
+    def briefing_news(self):
+        return News.objects.filter(stock=self,source='briefing').order_by('-pub_date')[:20]
 
 class News(models.Model):
     stock = models.ForeignKey(Stock, null=True)
-    # related to stocks, but not a true foreign key- until now.
-    ticker = models.CharField(max_length=15, db_index=True)
     source = models.CharField(max_length=15)
     title = models.CharField(max_length=512)
     description = models.TextField()
@@ -82,13 +81,13 @@ class News(models.Model):
     guid = models.CharField(max_length=240)
 
     class Meta:
-		# I hate you, MySQL. These can't add up to more than 1000 bytes using
-		# MyISAM, and since UTF-8 takes 3 bytes a piece, that means 333
-		# characters total for all three fields, thus the oddly sized '240'
-		# used for guid above.
-        unique_together = ('source', 'ticker', 'guid')
+        # I hate you, MySQL. These can't add up to more than 1000 bytes using
+        # MyISAM, and since UTF-8 takes 3 bytes a piece, that means 333
+        # characters total for all three fields, thus the oddly sized '240'
+        # used for guid above.
+        unique_together = ('source', 'stock', 'guid')
 
         # Another useful index that is great to have, but we can't create it
         # via Django due to its non-uniqueness:
-        # CREATE INDEX `scanner_news_published` ON `scanner_news` (`source`, `ticker`, `pub_date`);
+        # CREATE INDEX `scanner_news_published` ON `scanner_news` (`source`, `stock_id`, `pub_date`);
 # vim: set ts=4 sw=4 et:
