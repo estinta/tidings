@@ -35,6 +35,11 @@ a.button:hover {
     margin-bottom: 0.5em;
 }
 
+#maincontent {
+	padding-left: 3em;
+	padding-right: 3em;
+}
+
 .message {
 	color: #c00000;
 }
