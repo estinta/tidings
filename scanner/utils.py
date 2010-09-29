@@ -83,7 +83,6 @@ def fetch_finviz(force=False, user=None, tickers=None):
     if not force:
         old_date = datetime.utcnow() - timedelta(hours=24)
         qs = qs.filter(finviz_last_update__lt=old_date)
-    print "fetching finviz for ", list(qs)
     for stock in qs:
         stock.finviz_float = Finviz.get_float(stock.ticker)
         stock.finviz_last_update = datetime.utcnow()
