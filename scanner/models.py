@@ -36,7 +36,6 @@ def get_news_sources():
 
 class Stock(models.Model):
     ticker = models.CharField(max_length=15)
-    user = models.ForeignKey(User, db_index=True)
 
     ## IBD Data
     # TODO: we can probably find company name somewhere else than IBD...
@@ -71,7 +70,8 @@ class Stock(models.Model):
         return news
 
 class News(models.Model):
-    # related to stocks, but not a true foreign key
+    stock = models.ForeignKey(Stock, null=True)
+    # related to stocks, but not a true foreign key- until now.
     ticker = models.CharField(max_length=15, db_index=True)
     source = models.CharField(max_length=15)
     title = models.CharField(max_length=512)

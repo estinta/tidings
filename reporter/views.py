@@ -7,11 +7,10 @@ from scanner.utils import fetch_ibd, fetch_finviz, fetch_news
 
 from .forms import BuildListForm, process_build_list
 
-def get_or_create_stocks(user, symbols):
+def get_or_create_stocks(symbols):
     stocks = []
     for symbol in symbols:
-        stock, created = Stock.objects.get_or_create(
-                ticker=symbol, user=user)
+        stock, created = Stock.objects.get_or_create(ticker=symbol)
         stocks.append(stock)
     return stocks
 
@@ -19,7 +18,7 @@ def get_or_create_stocks(user, symbols):
 def index(request):
     build_list_form = BuildListForm()
     symbols = process_build_list(request)
-    stocks = get_or_create_stocks(request.user, symbols)
+    stocks = get_or_create_stocks(symbols)
     fetch_news(user=request.user, tickers=symbols)
     profile = request.user.get_profile()
     fetch_ibd(profile.ibd_user, profile.ibd_password,
