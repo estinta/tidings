@@ -53,3 +53,4 @@ def render_aggregates(request, num_tweets=20,
 
     return render_to_response(template, RequestContext(request, context))
 
+# vim: set ts=4 sw=4 et:

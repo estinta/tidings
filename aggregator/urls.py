@@ -7,3 +7,4 @@ urlpatterns = patterns('aggregator.views',
             name="refresh_aggregates"),
         url(r'^refresh/$', 'refresh_aggregates'),
 )
+# vim: set ts=4 sw=4 et:

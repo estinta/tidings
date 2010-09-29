@@ -80,3 +80,4 @@ def parse_stock(response):
     parsed_data['sales_perc_change'] = parse_investor_table(doc,
             'Sales % Chg (Last Qtr)')
     return parsed_data
+# vim: set ts=4 sw=4 et:

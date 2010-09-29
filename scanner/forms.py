@@ -6,3 +6,4 @@ class UserProfileForm(ModelForm):
     class Meta:
         model = UserProfile
         exclude = ('user',)
+# vim: set ts=4 sw=4 et:

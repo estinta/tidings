@@ -11,3 +11,4 @@ def get_float(symbol):
     except IndexError: # Element could not be found
         return ''
 
+# vim: set ts=4 sw=4 et:

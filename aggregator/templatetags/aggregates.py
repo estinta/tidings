@@ -65,3 +65,4 @@ def gravatar(email, size=32):
     digest = hashlib.new('md5', email.lower()).hexdigest()
     url = 'http://www.gravatar.com/avatar/%s?s=%s&d=identicon' % (digest, size)
     return """<img src="%s" height="%s" width="%s"/>""" % (escape(url), size, size)
+# vim: set ts=4 sw=4 et:

@@ -38,3 +38,4 @@ def process_build_list(request):
         request.session['symbols'] = symbols
 
     return symbols
+# vim: set ts=4 sw=4 et:

@@ -98,3 +98,4 @@ def validate_briefing(username, password):
         return None
     return None
 
+# vim: set ts=4 sw=4 et:

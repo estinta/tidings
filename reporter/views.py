@@ -53,3 +53,4 @@ def purge_db(request):
     Stock.objects.all().delete()
     return redirect('/')
 
+# vim: set ts=4 sw=4 et:

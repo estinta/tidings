@@ -87,3 +87,4 @@ class News(models.Model):
         # Another useful index that is great to have, but we can't create it
         # via Django due to its non-uniqueness:
         # CREATE INDEX `scanner_news_published` ON `scanner_news` (`source`, `ticker`, `pub_date`);
+# vim: set ts=4 sw=4 et:
