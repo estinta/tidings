@@ -9,15 +9,13 @@ from the following sites.</p>
     {{ form }}
     </table>
     <div>
-        <input type="submit" name="save" value="Save" />
         <input type="submit" name="validate" value="Save and Validate" />
-        <input type="hidden" name="next" value="{{ next }}" />
     </div>
 </form>
 
-{% if status_check %}
 <h3>Credentials Status</h3>
-<p>The status of your credentials as entered and saved above:</p>
+<p>The status of your credentials is shown below. To refresh these statuses,
+save the form above and a validation check will be run.</p>
 <table id="creds-status">
     <tr>
         <th>IBD</th>
@@ -28,5 +26,4 @@ from the following sites.</p>
         <td><span class="{{ briefing_status|slugify }}">{{ briefing_status }}</span></td>
     </tr>
 </table>
-{% endif %}
 {% endblock %}

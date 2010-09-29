@@ -4,7 +4,7 @@ from django.template import RequestContext
 
 from .models import UserProfile
 from .forms import UserProfileForm
-from .utils import validate_ibd, validate_briefing
+from .utils import validate_credentials
 
 @login_required
 def edit_profile(request):
@@ -15,28 +15,22 @@ def edit_profile(request):
             # ensure we only edit our own
             up = form.save(commit=False)
             up.user = request.user
+            validate_credentials(up, save=False)
             up.save()
-            if 'validate' not in request.POST:
-                next = request.GET.get('next') or '/'
-            else:
-                next = request.path + '?check=true'
-            return redirect(next)
+            return redirect(request.path)
     else:
         form = UserProfileForm(instance=prof)
 
-    ctx = { 'form': form }
-    if 'check' in request.GET:
-        ctx['ibd_status'] = validate_creds(validate_ibd,
-                prof.ibd_user, prof.ibd_password)
-        ctx['briefing_status'] = validate_creds(validate_briefing,
-                prof.briefing_user, prof.briefing_password)
-        ctx['status_check'] = True
+    ctx = {
+        'form': form,
+        'ibd_status': status(prof.ibd_valid),
+        'briefing_status': status(prof.briefing_valid),
+    }
 
     return render_to_response('registration/profile.html',
             RequestContext(request, ctx))
 
-def validate_creds(func, username, password):
-    success = func(username, password)
+def status(success):
     if success is None:
         return "No Credentials"
     if success:

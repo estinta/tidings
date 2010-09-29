@@ -88,14 +88,22 @@ def fetch_finviz(force=False, user=None, tickers=None):
         stock.finviz_last_update = datetime.utcnow()
         stock.save()
 
-def validate_ibd(username, password):
-    if not username or not password:
-        return None
-    return StockLookup.login(username, password)
+def validate_credentials(profile, save=True):
+    if not profile.ibd_user or not profile.ibd_password:
+        success = None
+    else:
+        success = StockLookup.login(profile.ibd_user, profile.ibd_password)
+    profile.ibd_valid = success
 
-def validate_briefing(username, password):
-    if not username or not password:
-        return None
-    return None
+    if not profile.briefing_user or not profile.briefing_password:
+        success = None
+    else:
+        success = None
+    profile.briefing_valid = success
+
+    if save:
+        profile.save()
+
+    return profile
 
 # vim: set ts=4 sw=4 et:
