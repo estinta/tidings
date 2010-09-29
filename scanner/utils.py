@@ -6,6 +6,11 @@ from . import StockNews
 
 from .models import News, Stock
 
+def make_url_opener():
+    cookiejar = cookielib.LWPCookieJar()
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
+    return opener
+
 def fetch_news(force=False, user=None, tickers=None):
     qs = Stock.objects.all()
     if tickers != None:

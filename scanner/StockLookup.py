@@ -9,23 +9,19 @@ import datetime
 
 LOGIN_URL = "http://www.investors.com/Services/SiteAjaxService.asmx/MemberSingIn"
 URL = "http://www.investors.com/StockResearch/StockCheckup.aspx?symbol="
-USER_AGENT = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2"
 
+USER_AGENT = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.10) Gecko/20100928 Firefox/3.6.10"
 HEADERS={'User-Agent': USER_AGENT}
-
-cookiejar = cookielib.LWPCookieJar()
-opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
-urllib2.install_opener(opener)
 
 COMPANY_GROUP_RE = re.compile('(.*) RANK WITHIN THE (.*) GROUP \(\d+ STOCKS\)')
 
-def login(username, password):
+def login(opener, username, password):
     req = urllib2.Request(LOGIN_URL,
             urlencode({'strEmail': username,
                 'strPassword': password,
                 'blnRemember': 'False'}), headers=HEADERS)
     try:
-        response = urllib2.urlopen(req)
+        response = opener.open(req)
         data = response.read()
     except urllib2.URLError, e:
         print "login", e
@@ -35,10 +31,10 @@ def login(username, password):
         return True
     return False
 
-def get_stock(symbol):
+def get_stock(opener, symbol):
     req = urllib2.Request(URL + symbol, headers=HEADERS)
     try:
-        response = urllib2.urlopen(req)
+        response = opener.open(req)
         return response
     except urllib2.URLError, e:
         print "get_stock failed", e

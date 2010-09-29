@@ -9,12 +9,6 @@ RSS_URLS = {
     'msn': "http://moneycentral.msn.com/community/rss/generate_feed.aspx?feedType=0&Symbol="
 }
 
-USER_AGENT = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.10) Gecko/20100928 Firefox/3.6.10"
-
-HEADERS={'User-Agent': USER_AGENT}
-
-HTML_TAGS = re.compile('<.*?>')
-
 YAHOO_DATE = re.compile(r'([A-Za-z]{3}), (\d{,2}) ([A-Za-z]{3}) (\d{4}) (\d{,2}):(\d{2}):(\d{2}) Etc/GMT')
 
 def yahoo_date_parser(date_string):
@@ -52,5 +46,37 @@ def get_rss_news(symbol, source):
                 'source': source,
             })
     return news
+
+def parse_briefing_news(response):
+    if not response:
+        return None
+    parsed_data = {}
+    doc = lxml.html.parse(response).getroot()
+    # Here is what we are looking at finding in this document:
+    # table.search-results-lip
+    # tr.goldRowBold
+    # << each article
+    # tr
+    # td (date, always first td element)
+    # td....
+    # td.result-lip-article
+    #   div.search-lip-title (title)
+    #   div.search-lip-article (description)
+    # << end foreach
+
+    # there should just be one
+    news = doc.cssselect("table.search-results-lip")[0]
+    for row in news.cssselect("tr"):
+        cl = row.get("class")
+        if cl and 'goldRowBold' in cl.split():
+            # skip the header row
+            continue
+        date = row.xpath('td[1]/div/text()')[0]
+        title_ele = row.cssselect("td.result-lip-article div.search-lip-title")
+        title = etree.tostring(title_ele[0], encoding=unicode, method='text').strip()
+        desc_ele = row.cssselect("td.result-lip-article div.search-lip-article")
+        desc = etree.tostring(desc_ele[0], encoding=unicode, method='html').strip()
+        print title, "::::", desc
+    return None
 
 # vim: set ts=4 sw=4 et:
