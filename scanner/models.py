@@ -14,6 +14,10 @@ class UserProfile(models.Model):
             blank=True, default="")
     ibd_password = models.CharField("IBD Password", max_length=100,
             blank=True, default="")
+    briefing_user = models.CharField("Briefing.com Username", max_length=100,
+            blank=True, default="")
+    briefing_password = models.CharField("Briefing.com Password", max_length=100,
+            blank=True, default="")
 
 def ensure_profile_exists(sender, **kwargs):
     if kwargs.get('created', False):
