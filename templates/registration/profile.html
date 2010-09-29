@@ -15,6 +15,7 @@ from the following sites.</p>
     </div>
 </form>
 
+{% if status_check %}
 <h3>Credentials Status</h3>
 <p>The status of your credentials as entered and saved above:</p>
 <table id="creds-status">
@@ -27,4 +28,5 @@ from the following sites.</p>
         <td><span class="{{ briefing_status|slugify }}">{{ briefing_status }}</span></td>
     </tr>
 </table>
+{% endif %}
 {% endblock %}

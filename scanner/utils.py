@@ -78,13 +78,11 @@ def fetch_ibd(username, password, force=False, user=None,
 
 def validate_ibd(username, password):
     if not username or not password:
-        return "No Credentials"
-    success = StockLookup.login(username, password)
-    if success:
-        return "Valid Credentials"
-    else:
-        return "Invalid Credentials"
+        return None
+    return StockLookup.login(username, password)
 
 def validate_briefing(username, password):
-    return "No Credentials"
+    if not username or not password:
+        return None
+    return None
 

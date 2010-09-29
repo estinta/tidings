@@ -26,10 +26,20 @@ def edit_profile(request):
 
     ctx = { 'form': form }
     if 'check' in request.GET:
-        ctx['ibd_status'] = validate_ibd(prof.ibd_user, prof.ibd_password)
-        ctx['briefing_status'] = validate_briefing(
+        ctx['ibd_status'] = validate_creds(validate_ibd,
+                prof.ibd_user, prof.ibd_password)
+        ctx['briefing_status'] = validate_creds(validate_briefing,
                 prof.briefing_user, prof.briefing_password)
+        ctx['status_check'] = True
 
     return render_to_response('registration/profile.html',
             RequestContext(request, ctx))
+
+def validate_creds(func, username, password):
+    success = func(username, password)
+    if success is None:
+        return "No Credentials"
+    if success:
+        return "Valid Credentials"
+    return "Invalid Credentials"
 
