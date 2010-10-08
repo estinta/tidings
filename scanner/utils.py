@@ -97,11 +97,12 @@ class DataFetcher(object):
             try:
                 response = self.opener.open(req)
                 data = response.read()
+                if "SOK" in data:
+                    self._ibd_login = True
+                else:
+                    self._ibd_login = False
             except urllib2.URLError, e:
-                self._ibd_login = False
-            if "SOK" in data:
-                self._ibd_login = True
-            else:
+                print "ibd login failure", e
                 self._ibd_login = False
         return self._ibd_login
 
@@ -164,8 +165,11 @@ class DataFetcher(object):
         try:
             response = self.opener.open(url)
             data = response.read()
-            return re.search(r'_concurrencyExceededDisplay', data)
+            if re.search(r'_concurrencyExceededDisplay', data):
+                return True
+            return False
         except urllib2.URLError, e:
+            print "urlerror", e
             return None
 
     def briefing_clear_session(self):
@@ -181,6 +185,7 @@ class DataFetcher(object):
             data = response.read()
             return re.search(r'Your session has been successfully cleared', data)
         except urllib2.URLError, e:
+            print "clear fail", e
             return False
 
     def briefing_logout(self):
