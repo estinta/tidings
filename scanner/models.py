@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 
-from . import StockNews
-
 class UserProfile(models.Model):
     # Required to be a valid profile module
     user = models.ForeignKey(User, unique=True)

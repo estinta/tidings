@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
 from scanner.models import News, Stock
-from scanner.utils import fetch_ibd, fetch_finviz, fetch_news
+from scanner.utils import DataFetcher
 
 from .forms import BuildListForm, process_build_list
 
@@ -19,10 +19,12 @@ def index(request):
     build_list_form = BuildListForm()
     symbols = process_build_list(request)
     stocks = get_or_create_stocks(symbols)
-    fetch_news(user=request.user, tickers=symbols)
     profile = request.user.get_profile()
-    fetch_ibd(profile.ibd_user, profile.ibd_password, tickers=symbols)
-    fetch_finviz(tickers=symbols)
+    df = DataFetcher(profile)
+    try:
+        df.fetch_all_data(tickers=symbols)
+    finally:
+        df.destroy()
     # TODO: sucks that we have to fetch twice, but need to make
     # sure we pick up updates from above fetches
     stocks = get_or_create_stocks(symbols)
