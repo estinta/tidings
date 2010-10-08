@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if not user.get_profile.ibd_user %}
+{% if not user.get_profile.ibd_valid %}
 <p class="message">Please fill out your <a href="/accounts/profile/">user
-	profile</a> to ensure you can continue using the site.</p>
+profile</a> to ensure information retrieved from IBD is up-to-date.</p>
+{% endif %}
+{% if not user.get_profile.briefing_valid %}
+<p class="message">To show news from Briefing.com, enter the credentials for
+the site in your <a href="/accounts/profile/">user profile</a>.</p>
 {% endif %}
 {% include "reporter/build_list_form.html" %}
 
@@ -31,7 +35,11 @@
     <tr>
         <th>Google</th>
         <th>MSN</th>
+        {% if user.get_profile.briefing_valid %}
+        <th>Briefing.com</th>
+        {% else %}
         <th>Yahoo</th>
+        {% endif %}
     </tr>
     <tr>
         <td>
@@ -56,6 +64,19 @@
                 {% endfor %}
             </ul>
         </td>
+        {% if user.get_profile.briefing_valid %}
+        <td>
+            <ul class="newsitems">
+                {% for item in stock.briefing_news %}
+                <li>
+                    <p>{{item.title}} —
+                    {{item.pub_date}} ET —
+                    {{item.description|safe}}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </td>
+        {% else %}
         <td>
             <ul class="newsitems">
                 {% for item in stock.yahoo_news %}
@@ -67,6 +88,7 @@
                 {% endfor %}
             </ul>
         </td>
+        {% endif %}
     </tr>
 </table>
 </div>
