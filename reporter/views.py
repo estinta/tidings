@@ -47,10 +47,4 @@ def remove_all_symbols(request):
     request.session['symbols'] = set()
     return redirect('/')
 
-# TODO: admin only, perhaps?
-@login_required
-def purge_db(request):
-    Stock.objects.all().delete()
-    return redirect('/')
-
 # vim: set ts=4 sw=4 et:
