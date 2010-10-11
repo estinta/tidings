@@ -212,7 +212,7 @@ class DataFetcher(object):
             stock.finviz_last_update = datetime.utcnow()
         except IndexError:
             # Element could not be found
-            pass
+            print "Finviz index error"
         return stock
 
     def update_ibd(self, stock):
@@ -326,7 +326,6 @@ class DataFetcher(object):
         return news
 
     def update_briefing(self, stock):
-        # TODO: we really need to logout too or we get locked out.
         if not self.briefing_login():
             print "could not login to Briefing.com, skipping"
             return stock
@@ -343,7 +342,7 @@ class DataFetcher(object):
         response = response.read()
         data = unicode(response, 'utf8')
         doc = lxml.html.fromstring(data)
-       # Here is what we are looking at finding in this document:
+        # Here is what we are looking at finding in this document:
         # table.search-results-lip
         # tr.goldRowBold
         # << each article
@@ -355,33 +354,39 @@ class DataFetcher(object):
         #   div.search-lip-article (description)
         # << end foreach
 
-        # there should just be one
-        news = doc.cssselect("table.search-results-lip")[0]
-        for row in news.cssselect("tr"):
-            cl = row.get("class")
-            if cl and 'goldRowBold' in cl.split():
-                # skip the header row
-                continue
-            date = row.xpath('td[1]/div/text()')[0]
-            title_ele = row.cssselect("td.result-lip-article div.search-lip-title")
-            title = lxml.etree.tostring(title_ele[0], encoding=unicode, method='text').strip()
-            desc_ele = row.cssselect("td.result-lip-article div.search-lip-article")
-            desc = lxml.etree.tostring(desc_ele[0], encoding=unicode, method='html').strip()
+        try:
+            # there should just be one
+            news = doc.cssselect("table.search-results-lip")[0]
+            for row in news.cssselect("tr"):
+                cl = row.get("class")
+                if cl and 'goldRowBold' in cl.split():
+                    # skip the header row
+                    continue
+                date = row.xpath('td[1]/div/text()')[0]
+                title_ele = row.cssselect("td.result-lip-article div.search-lip-title")
+                title = lxml.etree.tostring(title_ele[0], encoding=unicode, method='text').strip()
+                desc_ele = row.cssselect("td.result-lip-article div.search-lip-article")
+                desc = lxml.etree.tostring(desc_ele[0], encoding=unicode, method='html').strip()
 
-            guid = date + '::' + title
-            guid = guid[:guid_len]
-            if News.objects.filter(stock=stock,
-                    source='briefing', guid=guid).exists():
-                continue
-            # Yes, we will be storing these ones as ET
-            date = time.strptime(date, '%d-%b-%y %H:%M ET')
-            # convert from struct_time to datetime object
-            date = datetime(*date[:6])
-            news = News(source='briefing', stock=stock, guid=guid,
-                    title=title, description=desc, pub_date=date)
-            news.save()
+                guid = date + '::' + title
+                guid = guid[:guid_len]
+                if News.objects.filter(stock=stock,
+                        source='briefing', guid=guid).exists():
+                    continue
+                # Yes, we will be storing these ones as ET
+                date = time.strptime(date, '%d-%b-%y %H:%M ET')
+                # convert from struct_time to datetime object
+                date = datetime(*date[:6])
+                news = News(source='briefing', stock=stock, guid=guid,
+                        title=title, description=desc, pub_date=date)
+                news.save()
 
-        stock.briefing_last_update = datetime.utcnow()
+            stock.briefing_last_update = datetime.utcnow()
+        except IndexError, e:
+            # Element could not be found. Not good, but better than throwing
+            # a 500 back to the user because of it.
+            print "Briefing index error"
+
         return stock
 
     def fetch_all_data(self, tickers=None, force_finviz=False, force_ibd=False,
