@@ -120,10 +120,15 @@ class DataFetcher(object):
             self._briefing_login = False
         else:
             login = self.briefing_do_login()
+            print "first login attempt:", login
             if login and self.briefing_is_locked_out():
+                print "locked out?", "yes"
                 self.briefing_clear_session()
-                login = self.briefing_do_login() and \
-                        self.briefing_is_locked_out()
+                login = self.briefing_do_login()
+                print "second login attempt:", login
+                if login:
+                    login = not self.briefing_is_locked_out()
+                    print "not locked out?", login
             self._briefing_login = login
 
         return self._briefing_login
@@ -386,6 +391,11 @@ class DataFetcher(object):
             # Element could not be found. Not good, but better than throwing
             # a 500 back to the user because of it.
             print "Briefing index error"
+            # Save the response if we need to do later debugging as to what
+            # we actually got back
+            output = open("/tmp/briefing_news.html", 'wb')
+            output.write(data)
+            output.close()
 
         return stock
 
