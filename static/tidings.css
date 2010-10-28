@@ -23,7 +23,133 @@ a.button {
   font-weight: normal;
   margin: 5px 0;
 }
+	
+/*GENERAL SETTINGS*/
 
+body /*add this properties for BODY to your existing one if there are not present*/
+{
+	background:url(/static/images/header_backgr.jpg) repeat-x;
+	height:40px;
+	margin:0;
+	padding:0
+}
+
+
+/*HEADER*/
+.header
+{
+	width:960px;
+	height:40px;
+	margin-left:auto;
+	margin-right:auto
+}
+
+.header ul
+{
+	margin:0;
+	padding:0;
+	list-style-type:none
+}
+
+
+/*logo*/
+.logo
+{
+	background:url(/static/images/logo.jpg) no-repeat;
+	float:left;
+	width:180px;
+	height:40px
+}
+
+
+
+/* I'VE MADE THE MENUS WITH SLIDING DOOR */
+
+/*MENUS*/
+.menuLeft
+{
+	height:40px;
+	position:relative;
+	float:left
+}
+
+.menuRight /*this class is for displaying the LOGIN link*/
+{
+	height:40px;
+	position:relative;
+	float:right
+}
+
+.menuRightO /*this class is for displaying the LOGOUT link*/
+{
+	height:40px;
+	position:relative;
+	float:right
+}
+
+.menuLeft li,
+.menuRight li,
+.menuRightO li
+{
+	display:block;
+	float:left;
+}
+
+.menuLeft a,
+.menuRight a,
+.menuRightO a
+{
+	background: url(/static/images/button_a.jpg) no-repeat top right;
+	float:left;
+	text-decoration: none;
+}
+
+.menuLeft a span,
+.menuRight a span,
+.menuRightO a span
+{
+	background: url(/static/images/button_a.jpg) no-repeat top left;
+	font-family: Times New Roman;
+	font-size: 16px;
+	font-weight:bold;
+	color:#ffffff;
+	margin: 0 10px 0 -3px;
+	padding: 11px 8px 5px 15px;
+	position: relative; /*To fix IE6 problem (not displaying)*/
+	float:left;
+ 	height:24px
+}
+
+
+.menuLeft a:hover,
+.menuRight a:hover,
+.menuRightO a:hover
+{
+	background: url(/static/images/button_h.jpg) no-repeat top right;
+}
+
+.menuLeft a:hover span,
+.menuRight a:hover span,
+.menuRightO a:hover span
+{
+	background: url(/static/images/button_h.jpg) no-repeat top left;
+	color: #444444;
+}
+
+.menuLeft a.current,
+.menuRight a.current,
+.menuRightO a.current
+{
+	background: url(/static/images/button_c.jpg) no-repeat top right;
+}
+
+.menuLeft a.current span,
+.menuRight a.current span,
+.menuRightO a.current span
+{
+	background: url(/static/images/button_c.jpg) no-repeat top left;
+ 	color: #ffffff;
+}
 a.button:hover {
   text-decoration: none;
   background: #bde;
@@ -36,7 +162,8 @@ a.button:hover {
 }
 
 #maincontent {
-    padding-left: 3em;
+    padding-top: 1em;
+	padding-left: 3em;
     padding-right: 3em;
 }
 
