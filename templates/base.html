@@ -10,25 +10,27 @@
         <div id="mainheader" class="header">
             <a name="top"></a>
             <div class="logo"></div>
-            <div class="menu menu-left">
-                <ul>
+            <div class="menu {% block menu-highlight %}none{% endblock %}">
+                <div class="menu-left">
                     {% if user.is_authenticated %}
-                    <li><a href="/"><span>news</span></a></li>
+                    <ul>
+                        <li><a href="/"><span class="news">news</span></a></li>
+                    </ul>
                     {% endif %}
-                </ul>
-            </div>
+                </div>
 
-            <div class="menu menu-right">
-                <ul>
-                    {% if user.is_authenticated %}
-                    <li><a href="/accounts/profile/"><span>settings</span></a></li>
-                    <li><a href="#" onclick="UserVoice.Popin.show(uservoiceOptions); return false;"><span>feedback</span></a></li>
-                    <li><a href="/accounts/logout/"><span>logout</span></a></li>
-                    {% else %}
-                    <li><a href="/accounts/register/"><span>register</span></a></li>
-                    <li><a href="/accounts/login/"><span>login</span></a></li>
-                    {% endif %}
-                </ul>
+                <div class="menu-right">
+                    <ul>
+                        {% if user.is_authenticated %}
+                        <li><a href="/accounts/profile/"><span class="settings">settings</span></a></li>
+                        <li><a href="#" onclick="UserVoice.Popin.show(uservoiceOptions); return false;"><span>feedback</span></a></li>
+                        <li><a href="/accounts/logout/"><span class="logout">logout</span></a></li>
+                        {% else %}
+                        <li><a href="/accounts/register/"><span class="register">register</span></a></li>
+                        <li><a href="/accounts/login/"><span class="login">login</span></a></li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
         </div>
 

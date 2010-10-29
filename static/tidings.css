@@ -72,10 +72,26 @@ table {
     color:#444444;
 }
 
-.header .menu a.current span {
-    background:url(/static/images/button_c.jpg) no-repeat top right;
+/* if there is a class on the ul element, something will get highlighted */
+.header .news a span.news,
+.header .settings a span.settings,
+.header .logout a span.logout,
+.header .register a span.register,
+.header .login a span.login
+{
+    background:url(/static/images/button_c.jpg) no-repeat top left;
     color:#ffffff;
 }
+.header .news a:hover span.news,
+.header .settings a:hover span.settings,
+.header .logout a:hover span.logout,
+.header .register a:hover span.register,
+.header .login a:hover span.login
+{
+    background:url(/static/images/button_h.jpg) no-repeat top left;
+    color:#444444;
+}
+
 
 a.button {
   text-decoration: none;
