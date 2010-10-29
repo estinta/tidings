@@ -7,40 +7,31 @@
         {% block extrahead %}{% endblock %}
     </head>
     <body>
-		<div class="header">
-			<a name="top">
-			<div class="logo"></div>
-			
-	<!-- 
-		 I PUT THE "current" CLASS ONLY AT FIRST LINK TO DEMONSTRATE.
-	     FOR DISPlAYING THE SELECTED/ACTIVE LINK PUT CLASS "current" IN ALL <a> TAGS. 
-		 TREAT THE CLASS "current" PRESENT IN ALL <a> TAGS.
-    -->
-			
-			<div class="menuLeft">
-				<ul>
+        <div id="mainheader" class="header">
+            <a name="top"></a>
+            <div class="logo"></div>
+            <div class="menu menu-left">
+                <ul>
                     {% if user.is_authenticated %}
-                    <li><a class="current" href="/"><span>news</span></a></li>
-					<!--<li><a href="/checkup"><span>checkup</span></a></li>
-					<li><a href="#"><span>report</span></a></li>-->
+                    <li><a href="/"><span>news</span></a></li>
                     {% endif %}
-				</ul>
-			</div>
+                </ul>
+            </div>
 
-			<div class="menuRight">
-			<ul>
-				{% if user.is_authenticated %}
-				<li><a href="/accounts/profile/"><span>settings</span></a></li>
-				<li><a href="#" onclick="UserVoice.Popin.show(uservoiceOptions); return false;"><span>feedback</span></a></li>
-				<li><a {% if request.path == "/" %}class="current"{%endif %} href="/accounts/logout/"><span>logout</span></a></li>
-				{% else %}
-                 <li><a href="/accounts/register/"><span>register</span></a></li>
-                 <li><a href="/accounts/login/"><span>login</span></a></li>
-                {% endif %}
-			</ul>
-			</div>
-		</div>
-			
+            <div class="menu menu-right">
+                <ul>
+                    {% if user.is_authenticated %}
+                    <li><a href="/accounts/profile/"><span>settings</span></a></li>
+                    <li><a href="#" onclick="UserVoice.Popin.show(uservoiceOptions); return false;"><span>feedback</span></a></li>
+                    <li><a href="/accounts/logout/"><span>logout</span></a></li>
+                    {% else %}
+                    <li><a href="/accounts/register/"><span>register</span></a></li>
+                    <li><a href="/accounts/login/"><span>login</span></a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
         <div id="maincontent">
             {% block content %}{% endblock %}
         </div>
