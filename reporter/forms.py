@@ -19,14 +19,6 @@ def process_build_list(request):
     '''
     symbols = request.session.get('symbols', set())
 
-    # backward-compatibility code- make sure all symbols are upper-case
-    correct_symbols = set()
-    for s in symbols:
-        correct_symbols.add(s.upper())
-    if symbols != correct_symbols:
-        request.session['symbols'] = correct_symbols
-        symbols = correct_symbols
-
     if 'build_list' not in request.POST:
         return symbols
 
