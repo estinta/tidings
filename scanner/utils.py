@@ -209,7 +209,11 @@ class DataFetcher(object):
             self.briefing_logout()
 
     def update_finviz(self, stock):
-        response = self.opener.open(self.finviz_url + stock.ticker)
+        try:
+            response = self.opener.open(self.finviz_url + stock.ticker)
+        except urllib2.URLError:
+            print "Could not connect to finviz"
+            return stock
         doc = lxml.html.parse(response).getroot()
         try:
             value = doc.xpath("//td[.='Shs Float']/following-sibling::*[1]/b")[0].text
