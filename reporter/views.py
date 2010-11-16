@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.forms.formsets import formset_factory
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
 from scanner.models import News, Stock
 from scanner.utils import DataFetcher
 
-from .forms import BuildListForm, process_build_list
+from .forms import CheckupForm, BuildListForm, process_build_list
 
 def get_or_create_stocks(symbols):
     stocks = []
@@ -46,5 +47,58 @@ def remove_symbol(request, symbol):
 def remove_all_symbols(request):
     request.session['symbols'] = set()
     return redirect('/')
+
+def checkup_get_defaults(user, checkup_data):
+    df = DataFetcher(user.get_profile())
+    symbols = [d['ticker'] for d in checkup_data]
+    try:
+        # TODO don't need any news
+        df.fetch_all_data(tickers=symbols)
+    finally:
+        df.destroy()
+
+    mapper = {
+            'sector_rank': 'ibd_industry_rank',
+            'eps': 'ibd_earnings_percentage_lastquarter',
+            'eps_rank': 'ibd_eps_rank',
+            'sales_percentage': 'ibd_sales_percentage_lastquarter',
+            'total_float': 'finviz_float',
+    }
+
+    for item in checkup_data:
+        try:
+            stock = Stock.objects.get(ticker=item['ticker'])
+        except Stock.DoesNotExist:
+            continue
+        for field, value in mapper.iteritems():
+            if field not in item or not item[field]:
+                item[field] = getattr(stock, value)
+
+@login_required
+def checkup(request):
+    CheckupFormSet = formset_factory(CheckupForm, extra=3, can_delete=True)
+    valid_data = []
+
+    if request.method == 'POST':
+        formset = CheckupFormSet(request.POST)
+        if formset.is_valid():
+            for form in formset.forms:
+                if form not in formset.deleted_forms:
+                    if 'ticker' in form.cleaned_data:
+                        valid_data.append(form.cleaned_data)
+            checkup_get_defaults(request.user, valid_data)
+            formset = CheckupFormSet(initial=valid_data)
+    else:
+        # first time on page, grab the usual list in the session
+        symbols = request.session.get('symbols', set())
+        valid_data = [{'ticker': s} for s in symbols]
+        checkup_get_defaults(request.user, valid_data)
+        formset = CheckupFormSet(initial=valid_data)
+
+    ctx = RequestContext(request, {
+        "stock_formset": formset,
+        "valid_data": valid_data,
+    })
+    return render_to_response("reporter/checkup.html", ctx)
 
 # vim: set ts=4 sw=4 et:

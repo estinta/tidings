@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Checkup and Analysis List</h2>
+<form method="POST">{% csrf_token %}
+<div class="checkup-form">
+<p>The list of symbols used here is initially taken from your list set
+up on the other pages. Any changes to the data shown here will not be
+reflected elsewhere, but will last as long as you stay on this page and
+do not navigate away. Blank rows are provided to enter more symbols;
+if you need more, press "Update" and extras will appear in the table.</p>
+{{ stock_formset.management_form }}
+<table>
+    <tr>
+        <th>Ticker</th>
+        <th>Sector Rank</th>
+        <th>EPS</th>
+        <th>EPS Rank</th>
+        <th>Sales</th>
+        <th>Float</th>
+        <th>Verdict</th>
+        <th>Risk %</th>
+        <th>Comment</th>
+        <th>Delete?</th>
+        <th>Errors</th>
+    </tr>
+    {% for form in stock_formset.forms %}
+    <tr>
+        <td>{{form.ticker}}</td>
+        <td>{{form.sector_rank}}</td>
+        <td>{{form.eps}}</td>
+        <td>{{form.eps_rank}}</td>
+        <td>{{form.sales_percentage}}</td>
+        <td>{{form.total_float}}</td>
+        <td>{{form.verdict}}</td>
+        <td>{{form.risk_percentage}}</td>
+        <td class="wide-input">{{form.comment}}</td>
+        <td>{{form.DELETE}}</td>
+        <td>{{form.errors}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<input type="submit" name="stock_form_submit" value="Update" />
+</div>
+</form>
+<h2>Publish</h2>
+<p>Here is the report:</p>
+{% include "reporter/checkup_output.html" %}
+<p>And here is the code to copy/paste:</p>
+<textarea rows="15" cols="50">{% include "reporter/checkup_output.html" %}</textarea>
+{% endblock %}

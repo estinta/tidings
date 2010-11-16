@@ -1,6 +1,19 @@
+import re
+
 from django import forms
 
-import re
+class CheckupForm(forms.Form):
+    '''In theory, this could be a ModelForm, but we want to make absolutely
+    sure changes are never saved back to the underlying objects.'''
+    ticker = forms.CharField(max_length=15)
+    sector_rank = forms.CharField(max_length=15, required=False)
+    eps = forms.CharField(max_length=15, required=False)
+    eps_rank = forms.CharField(max_length=15, required=False)
+    sales_percentage = forms.CharField(max_length=15, required=False)
+    total_float = forms.CharField(max_length=15, required=False)
+    comment = forms.CharField(max_length=255, required=False)
+    verdict = forms.CharField(max_length=15, required=False)
+    risk_percentage = forms.CharField(max_length=15, required=False)
 
 class BuildListForm(forms.Form):
     symbols = forms.CharField(widget=forms.Textarea, required=False,
@@ -30,4 +43,5 @@ def process_build_list(request):
         request.session['symbols'] = symbols
 
     return symbols
+
 # vim: set ts=4 sw=4 et:

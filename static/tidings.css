@@ -266,3 +266,16 @@ div.commentform label {
 #creds-status span.invalid-credentials {
     color: red;
 }
+
+.checkup-form th, .checkup-form td {
+    border:1px solid #999;
+    font-size:0.9em;
+    margin:0.1em;
+    padding:0.2em;
+}
+.checkup-form input[type=text] {
+    width:5em;
+}
+.checkup-form .wide-input input {
+	width:15em;
+}

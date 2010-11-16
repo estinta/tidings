@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     (r'^timeline/', include('aggregator.urls')),
 
     (r'^$', 'reporter.views.index'),
+    (r'^checkup/$', 'reporter.views.checkup'),
     (r'^remove/(?P<symbol>[^/]+)/$', 'reporter.views.remove_symbol'),
     (r'^removeall/$', 'reporter.views.remove_all_symbols'),
 
