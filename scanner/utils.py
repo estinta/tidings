@@ -7,6 +7,7 @@ import re
 import time
 import urllib2
 
+from django.db import IntegrityError
 from django.db.models import Q
 from django.utils.hashcompat import md5_constructor
 from django.utils.http import urlencode
@@ -274,7 +275,11 @@ class DataFetcher(object):
                 # description, title, link, pub_date, source, guid (overridden below)
                 news.__setattr__(key, value)
             news.guid = guid
-            news.save()
+            try:
+                news.save()
+            except IntegrityError, e:
+                # we have a bit of a race condition; probably exists already
+                pass
 
     def parse_investor_table(self, doc, title):
         '''Helper for tables that contain a
