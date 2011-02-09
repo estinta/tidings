@@ -1,26 +1,28 @@
-<table style="margin-bottom:10px;background-color:#d9ead3" border="5" bordercolor="#274e13" cellpadding="3" cellspacing="0" width="750">
+<table style="margin-bottom:10px;background-color:#d9ead3; width:500px" border="5" bordercolor="#274e13" cellpadding="3" cellspacing="0">
     <tr style="background-color:#93c47d">
-        <th>Symbol</th>
+        <th style="width:40px">Symbol</th>
         <th>SR</th>
         <th>EPS</th>
         <th>S</th>
         <th>F</th>
         <th>B</th>
         <th>R</th>
-        <th>Analysis</th>
     </tr>
     {% for item in valid_data %}<tr>
-        <td style="text-align:right;white-space:nowrap">
+        <th rowspan="2"style="text-align:right;white-space:nowrap">
             <a href="http://finviz.com/quote.ashx?t={{item.ticker}}">{{item.ticker}}</a>&nbsp;&nbsp;
             <a href="http://stockcharts.com/charts/gallery.html?{{item.ticker}}"><img src="http://dl.dropbox.com/u/116248/ep_reporter_view_chart_icon.jpg"></a>
-        </td>
+        </th>
         <td>{{item.sector_rank}}</td>
         <td>{{item.eps}}</td>
         <td>{{item.sales_percentage}}</td>  
         <td>{{item.total_float}}</td>
         <td>{{item.verdict}}</td>
         <td>{{item.risk_percentage}}</td>
-        <td>{{item.comment}}</td>
-    </tr>{% endfor %}
+    </tr>
+	<tr>
+		<td colspan="6">{{item.comment}}</td>
+	</tr>
+	{% endfor %}
 </table>
 {% include "reporter/checkup_legend.html" %}
