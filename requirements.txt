@@ -1,6 +1,6 @@
-Django==1.2.3
+Django==1.2.7
 MySQL-python==1.2.3
-South==0.7.2
+South==0.7.3
 feedparser==4.1
-lxml==2.3beta1
+lxml==2.3.2
 wsgiref==0.1.2
