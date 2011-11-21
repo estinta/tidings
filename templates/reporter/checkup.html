@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>Checkup and Analysis List</h2>
-<form method="POST">{% csrf_token %}
+<form method="POST" action=".">{% csrf_token %}
 <div class="checkup-form">
 <p>The list of symbols used here is initially taken from your list set
 up on the other pages. Any changes to the data shown here will not be
