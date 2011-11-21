@@ -68,7 +68,6 @@ class DataFetcher(object):
     news_rss_urls = {
         'yahoo': "http://finance.yahoo.com/rss/headline?s=",
         'google': "http://www.google.com/finance/company_news?output=rss&q=",
-        'msn': "http://moneycentral.msn.com/community/rss/generate_feed.aspx?feedType=0&Symbol="
     }
 
     ibd_company_group_re = re.compile('(.*) RANK WITHIN THE (.*) GROUP \(\d+ STOCKS\)')
@@ -255,9 +254,6 @@ class DataFetcher(object):
         if force_news or stock.google_last_update < news_date:
             news_items.extend(self.get_rss_news(stock, 'google'))
             stock.google_last_update = datetime.utcnow()
-        if force_news or stock.msn_last_update < news_date:
-            news_items.extend(self.get_rss_news(stock, 'msn'))
-            stock.msn_last_update = datetime.utcnow()
 
         # Slightly hacky, but MySQL silently truncates our values otherwise
         # so we lose. This ensures we can do equality matching without any
@@ -424,7 +420,6 @@ class DataFetcher(object):
                     Q(ibd_last_update__lt=ibd_date) |
                     Q(yahoo_last_update__lt=news_date) |
                     Q(google_last_update__lt=news_date) |
-                    Q(msn_last_update__lt=news_date) |
                     Q(briefing_last_update__lt=news_date))
 
         for stock in qs:

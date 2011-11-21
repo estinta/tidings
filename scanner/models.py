@@ -62,9 +62,6 @@ class Stock(models.Model):
         # Google always has longer descriptions, so fetch fewer of them
         return News.objects.filter(stock=self,source='google').order_by('-pub_date')[:15]
 
-    def msn_news(self):
-        return News.objects.filter(stock=self,source='msn').order_by('-pub_date')[:20]
-
     def briefing_news(self):
         return News.objects.filter(stock=self,source='briefing').order_by('-pub_date')[:20]
 

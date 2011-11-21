@@ -35,11 +35,9 @@ the site in your <a href="/accounts/profile/">user profile</a>.</p>
 <table class="stocknews pretty">
     <tr>
         <th>Google</th>
-        <th>MSN</th>
+        <th>Yahoo</th>
         {% if user.get_profile.briefing_valid %}
         <th>Briefing.com</th>
-        {% else %}
-        <th>Yahoo</th>
         {% endif %}
     </tr>
     <tr>
@@ -56,7 +54,7 @@ the site in your <a href="/accounts/profile/">user profile</a>.</p>
         </td>
         <td>
             <ul class="newsitems">
-                {% for item in stock.msn_news %}
+                {% for item in stock.yahoo_news %}
                 <li>
                     <p><a href={{item.link}}>{{item.title}}</a> —
                     {{item.pub_date}} UTC —
@@ -72,18 +70,6 @@ the site in your <a href="/accounts/profile/">user profile</a>.</p>
                 <li>
                     <p>{{item.title}} —
                     {{item.pub_date}} ET —
-                    {{item.description|safe}}</p>
-                </li>
-                {% endfor %}
-            </ul>
-        </td>
-        {% else %}
-        <td>
-            <ul class="newsitems">
-                {% for item in stock.yahoo_news %}
-                <li>
-                    <p><a href={{item.link}}>{{item.title}}</a> —
-                    {{item.pub_date}} UTC —
                     {{item.description|safe}}</p>
                 </li>
                 {% endfor %}
